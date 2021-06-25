@@ -1,0 +1,27 @@
+backend
+
+# vue-frontend files
+vue-frontend/src/assets
+vue-frontend/.DS_Store
+vue-frontend/node_modules
+vue-frontend/dist
+
+
+# local env files
+vue-frontend/.env.local
+vue-frontend/.env.*.local
+
+# Log files
+vue-frontend/npm-debug.log*
+vue-frontend/yarn-debug.log*
+vue-frontend/yarn-error.log*
+vue-frontend/pnpm-debug.log*
+
+# Editor directories and files
+vue-frontend/.idea
+vue-frontend/.vscode
+vue-frontend/*.suo
+vue-frontend/*.ntvs*
+vue-frontend/*.njsproj
+vue-frontend/*.sln
+vue-frontend/*.sw?
