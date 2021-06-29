@@ -1,30 +1,32 @@
 <template>
   <Nav redirection="/login" />
-  <div>
-    <div id="loginForm">
-      <h3>Log in</h3>
-      <form @submit="onSubmit">
-        <input type="email" name="email" placeholder="Email" required v-model="email">
-        <input type="password" name="password" placeholder="Mot de passe" required v-model="password">
-        <input type="submit" value="Sign in !" class="btn">
-      </form>
-      <h4>{{ errMsg }}</h4>
-      <p>Je n'ai pas créé de compte ? Cliquez ici: <router-link to="/signup">Signup</router-link></p>
-    </div>
-  </div>
+  <div id="signupForm">
+    <h3>Sign up</h3>
+    <form @submit="onSubmit">
+      <input type="text" name="username" placeholder="Username" v-model="username">
+      <input type="email" name="email" placeholder="Email" v-model="email">
+      <input type="password" name="password" placeholder="Mot de passe" v-model="password">
+      <input type="password" name="confirm" placeholder="Confirmation mot de passe" v-model="confirm">
+      <input type="submit" value="Je m'inscris !" class="btn">
+    </form>
+    <h4>{{ errMsg }}</h4>
+    <p>Je possède déjà un compte ? Cliquez ici: <router-link to="/login">Login</router-link></p>
+  </div>    
 </template>
 
 <script>
 import Nav from '../components/Nav.vue'
 export default {
-  name: 'Login',
+  name: 'Signup',
   components: {
     Nav
   },
   data() {
     return {
+      username: null,
       email: null,
       password: null,
+      confirm: null,
       errMsg: null
     }
   },
@@ -34,20 +36,30 @@ export default {
       e.preventDefault();
       // assigne les valeurs du form à l'objet formData
       let formData = {
+        username: this.username,
         email: this.email,
         password: this.password
       }
       // affiche en console formData (les valeurs entrées par l'user)
       console.log(formData)
       // vérifie si tous les champs sont bien remplis
-      if (!this.email || !this.password) {
+      if (!this.username || !this.email || !this.password) {
         this.errMsg = "Err! Remplissez tous les champs du formulaire"
         return
       }
+      if (this.password !== this.confirm) {
+        this.errMsg = "Err! Le mot de passe et la confirmation du mot de passe ne sont pas les mêmes";
+        return
+      }
       // nos regex
+      const regexUsername = /^(?=.{4,20}$)(?:[a-zA-Z\d]+(?:(?:\.|-|_)[a-zA-Z\d])*)+$/g;
       const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
       const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
       // nos véfifications
+      if (!(regexUsername.test(this.username))) {
+        this.errMsg = "Username Err! => entre 4 et 20 caractères + alphanumérique seulement + pas d'accent ni espaces";
+        return
+      }
       if (!(regexEmail.test(this.email))) {
         this.errMsg = "Email Err! => l'email inscrit n'a pas le bon format (exemple@mail.com)"
       }
@@ -71,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-#loginForm {
+#signupForm {
   margin: 3rem;
   display: flex;
   justify-content: center;

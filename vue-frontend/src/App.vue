@@ -1,6 +1,7 @@
 <template>
   <div id="container">
-    <router-view/>  
+    <router-view/>
+    <div id="dot"></div>   
   </div>  
 </template>
 
@@ -22,10 +23,17 @@ export default {
 }
 #container {
   max-width: 80%;
-  border: 2px solid cornflowerblue;
+  min-height: 100vh;
   margin: auto;
 }
 img {
   height: 200px;
+}
+#dot {
+  margin: auto;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
 }
 </style>
