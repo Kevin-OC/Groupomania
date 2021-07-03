@@ -26,9 +26,6 @@ export default {
   min-height: 100vh;
   margin: auto;
 }
-img {
-  height: 200px;
-}
 #dot {
   margin: auto;
   height: 10px;

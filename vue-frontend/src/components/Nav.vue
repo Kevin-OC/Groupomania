@@ -6,7 +6,11 @@
         <div id="routes" v-if="!logged">
             <router-link to="/signup" class="link">Sign up</router-link>
             <router-link to="/login" class="link">Login</router-link>    
-        </div>      
+        </div>  
+        <div id="options" v-else>
+            <router-link to="/" class="link"><i class="fas fa-user"></i> User</router-link>
+            <router-link to="/" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
+        </div>    
     </div>
 </template>
 
@@ -14,12 +18,8 @@
 export default {
     name: 'Nav',
     props: {
-        redirection: String
-    },
-    data() {
-        return {
-            logged: false
-        }
+        redirection: String,
+        logged: Boolean,
     }
 }
 </script>
@@ -32,15 +32,17 @@ export default {
     height: 100px;
     border-bottom: 2px solid rgba(255, 15, 15, 0.5);
 }
-#routes {
+#routes, #options {
     display: flex;
     justify-content: flex-end;  
     width: 100%;  
 }
+img {
+    height: 200px;
+}
 .link {
     text-align: center;
     padding: 1rem;
-    width: 80px;
     text-decoration: none;
     color: black;
 }

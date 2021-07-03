@@ -1,21 +1,20 @@
 <template>
-  <Nav redirection="/login" />
-  <div>
-    <div id="loginForm">
-      <h3>Log in</h3>
-      <form @submit="onSubmit">
-        <input type="email" name="email" placeholder="Email" required v-model="email">
-        <input type="password" name="password" placeholder="Mot de passe" required v-model="password">
-        <input type="submit" value="Sign in !" class="btn">
-      </form>
-      <h4>{{ errMsg }}</h4>
-      <p>Je n'ai pas créé de compte ? Cliquez ici: <router-link to="/signup">Signup</router-link></p>
-    </div>
+  <Nav redirection="/login" :logged="false"/>
+  <div id="loginForm">
+    <h3>Log in</h3>
+    <form @submit="onSubmit">
+      <input type="email" name="email" placeholder="Email" required v-model="email">
+      <input type="password" name="password" placeholder="Mot de passe" required v-model="password">
+      <input type="submit" value="Sign in !" class="btn">
+    </form>
+    <h4>{{ errMsg }}</h4>
+    <p>Je n'ai pas créé de compte ? Cliquez ici: <router-link to="/signup">Signup</router-link></p>
   </div>
 </template>
 
 <script>
 import Nav from '../components/Nav.vue'
+import router from '../router'
 export default {
   name: 'Login',
   components: {
@@ -56,15 +55,16 @@ export default {
       }      
       // réinitialise le formumaire
       document.querySelector('form').reset();
+      router.push({ path: 'home' })
       // fonction fetch pour POST au backend les datas
-      fetch('http://localhost:3000/api/user', {
+      /*fetch('http://localhost:3000/api/user', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json'
         },
         body: JSON.stringify(formData)
       })
-      .catch(error => {console.error(error)});
+      .catch(error => {console.error(error)});*/
     }
   }
 }
@@ -83,8 +83,8 @@ export default {
 h3 {
   background: no-repeat center url('../assets/logos/icon.png');
   background-size: cover;
-  height: 200px;
-  width: 200px;
+  height: 160px;
+  width: 160px;
   text-align: center;
 }
 form {
