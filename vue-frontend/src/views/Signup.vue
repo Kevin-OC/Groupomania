@@ -119,7 +119,4 @@ input:hover {
   background-color: rgba(0, 128, 0, 0.836);
   margin: 2rem;
 }
-.btn:active {
-  transform: scale(0.98);
-}
 </style>

@@ -33,4 +33,10 @@ export default {
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.5);
 }
+button {
+  cursor: pointer;
+}
+button:active {
+  transform: scale(0.98);
+}
 </style>

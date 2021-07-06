@@ -1,7 +1,6 @@
 <template>
   <Nav redirection="/home" :logged="true" />
   <router-link to="/new-post" class="btn">Créer un nouveau post</router-link>
-  <h3>Publications</h3> 
   <Posts :posts="posts" /> 
 </template>
 
@@ -58,27 +57,18 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  background: no-repeat center url("../assets/logos/icon.png");
-  background-size: cover;
-  height: 160px;
-  width: 160px;
-  text-align: center;
-  margin: auto;
-}
 .btn {
   display: inline-block;
-  color: red;
+  color: rgba(0, 0, 0, 0.75);
   border: none;
   padding: 10px 20px;
   margin: 1rem;
   border-radius: 5px;
-  cursor: pointer;
   text-decoration: none;
-  border: 1px solid red;
+  border: 1px solid rgba(0, 0, 0, 0.75);
 }
 .btn:hover {
-  box-shadow: 2px 2px 8px 5px rgb(255 15 15 / 10%);
+  box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
 }
 .btn:active {
   transform: scale(0.98);

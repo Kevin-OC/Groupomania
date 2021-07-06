@@ -100,7 +100,7 @@ textarea {
     padding-top: 2rem;
 }
 .btn {
-    background-color: green;
+    background-color: #1c68e6;
     border-style: none;
     outline: none;
     width: 20%;
@@ -108,7 +108,7 @@ textarea {
     height: 40px;
     color: white;
 }
-.btn:active, .upload:active {
+.upload:active {
   transform: scale(0.98);
 }
 p {

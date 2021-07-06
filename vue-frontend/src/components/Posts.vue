@@ -10,13 +10,18 @@
                         <h4>{{ post.username }}</h4>
                         <p>posté le {{ post.date }}</p>    
                     </div>                 
-                    <button class="btn" @click="optionBtn(post)">...</button>
+                    <button class="option" @click="optionBtn(post)">...</button>
                 </div>                               
             </div>
             <p class="text">{{ post.text }}</p>
             <div class="mediaContainer">          
                 <img :src="post.file" alt="post image" class="media">
-            </div>      
+            </div>
+            <p class="like"><i class="fas fa-thumbs-up"></i> {{ post.likes }}</p>
+            <div class="interaction">
+                <button class="btn"><i class="far fa-thumbs-up" ></i> J'aime</button>
+                <button class="btn"><i class="far fa-comment"></i> Commenter</button>
+            </div>     
         </div>     
     </div>    
 </template>
@@ -37,14 +42,14 @@ export default {
 
 <style scoped>
 #postsContainer {
-    width: 70%;
+    width: 80%;
     margin: auto;
     border-radius: 4px;
 }
 .post {
-    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);;
+    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
     margin: 2rem;
-    padding: 1rem;
+    padding: 1rem 2rem 1rem 2rem;
     border-radius: 4px;
 }
 .header {
@@ -81,18 +86,34 @@ export default {
     text-align: center;
 }
 .media {
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1)
 }
-.btn {
+button {
     background: none;
     border-style: none;
-    outline: none;
+    outline: none;   
+}
+.option {
     font-size: 2rem;
     color: rgba(0, 0, 0, 0.7);
 }
-.btn:hover {
+.option:hover {
     color: black;
     transform: scale(1.04);
+}
+.interaction {
+    display: flex;
+    justify-content: space-around;
+}
+.like {
+    margin: 1rem 0 1rem 0;
+}
+.fas {
+    color: white;
+    background-color: #3174e4;
+    border-radius: 50%;
+    padding: 0.5rem;
 }
 </style>
