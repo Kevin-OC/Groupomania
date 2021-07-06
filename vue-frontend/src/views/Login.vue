@@ -1,11 +1,11 @@
 <template>
   <Nav redirection="/login" :logged="false"/>
   <div id="loginForm">
-    <h3>Log in</h3>
-    <form @submit="onSubmit">
-      <input type="email" name="email" placeholder="Email" required v-model="email">
-      <input type="password" name="password" placeholder="Mot de passe" required v-model="password">
-      <input type="submit" value="Sign in !" class="btn">
+    <h3>Login</h3>
+    <form @submit.prevent="onSubmit">
+      <input type="email" name="email" placeholder="Email" v-model="dataForm.email">
+      <input type="password" name="password" placeholder="Mot de passe" v-model="dataForm.password">
+      <input type="submit" value="Login !" class="btn">
     </form>
     <h4>{{ errMsg }}</h4>
     <p>Je n'ai pas créé de compte ? Cliquez ici: <router-link to="/signup">Signup</router-link></p>
@@ -22,39 +22,27 @@ export default {
   },
   data() {
     return {
-      email: null,
-      password: null,
+      dataForm: {
+        email: null,
+        password: null  
+      },
       errMsg: null
     }
   },
   methods: {
-    onSubmit(e) {
-      // prévient le rechargement auto de la page
-      e.preventDefault();
-      // assigne les valeurs du form à l'objet formData
-      let formData = {
-        email: this.email,
-        password: this.password
-      }
-      // affiche en console formData (les valeurs entrées par l'user)
-      console.log(formData)
+    onSubmit() {
+      // assigne les valeurs du form à l'objet data
+      const data = {
+        ...this.dataForm
+      }      
       // vérifie si tous les champs sont bien remplis
-      if (!this.email || !this.password) {
+      if (!data.email || !data.password) {
         this.errMsg = "Err! Remplissez tous les champs du formulaire"
         return
       }
-      // nos regex
-      const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
-      const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
-      // nos véfifications
-      if (!(regexEmail.test(this.email))) {
-        this.errMsg = "Email Err! => l'email inscrit n'a pas le bon format (exemple@mail.com)"
-      }
-      if(!(regexPassword.test(this.password))) {
-        this.errMsg = "Password Err! => entre 8 et 32 caractères + 1 minuscule min + 1 maj min + 1 caractère spécial"
-      }      
-      // réinitialise le formumaire
-      document.querySelector('form').reset();
+      // affiche en console data (les valeurs entrées par l'user)
+      console.log(data)
+      // redirection vers la route '/home'
       router.push({ path: 'home' })
       // fonction fetch pour POST au backend les datas
       /*fetch('http://localhost:3000/api/user', {
@@ -62,7 +50,7 @@ export default {
         headers: {
           'Content-type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(data)
       })
       .catch(error => {console.error(error)});*/
     }
@@ -95,17 +83,20 @@ form {
 input {
   margin: 0.8rem;
   padding: 10px;
-  box-shadow: 3px 5px 6px 2px rgb(0 0 0 / 10%);
+  box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
   border-style: none;
-  border-radius: 16px;
+  border-radius: 4px;
   outline: none;
 }
 input:hover {
-  box-shadow: 3px 5px 6px 2px rgb(0 0 0 / 20%);
+  box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 18%);
 }
 .btn {
   color: white;
   background-color: rgba(0, 128, 0, 0.836);
   margin: 2rem;
+}
+.btn:active {
+  transform: scale(0.98);
 }
 </style>

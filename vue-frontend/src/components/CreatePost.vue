@@ -1,24 +1,52 @@
 <template>
     <div id="createPost">
-        <h4>Partagez votre post</h4>
-        <form @submit="onSubmit">
-        <input type="textarea" name="textarea" placeholder="..." class="textarea">
-        <p class="uploadFile">            
-            <input type="file" name="uploadFile" class="uploadFileInput">
-            <label for="uploadFile">Upload image</label>
-        </p>
-        <input type="submit" value="Post" class="btn">
+        <form @submit.prevent="onSubmit">
+            <div id="top">
+                <div id="picture">
+                    <img src="../assets/logo.png" alt="profile pic">
+                </div>
+                <div id="text">
+                    <textarea name="textarea" placeholder="Publiez votre message" v-model="dataForm.text"></textarea>
+                </div>    
+            </div>            
+            <div id="bottom">
+                <input type="file" name="file" class="upload" id="file">                  
+                <input type="submit" value="Envoyez !" class="btn">
+            </div>
+            <p>{{errMsg}}</p>
         </form>
-  </div>
+    </div>
 </template>
 
 <script>
+import router from '../router'
 export default {
     name: 'CreatePost',
+    data() {
+        return {
+            dataForm: {
+                date: null,
+                text: null,
+                file: null
+            },
+        errMsg: null
+        }
+    },
     methods: {
-        onSubmit(e) {
-            e.preventDefault();
-            alert("are you sure ?")
+        onSubmit() {
+            this.dataForm.date = new Date();
+            this.dataForm.file = document.getElementById('file').value;
+            const data = {
+                date: this.dataForm.date,
+                text: this.dataForm.text,
+                file: this.dataForm.file
+            }            
+            if (!data.text) {
+                this.errMsg = "Error => vous devez remplir le champ message pour poster!"
+                return
+            }
+            console.log(data)
+            router.push({ path: 'home' })
         }
     }
 }
@@ -26,41 +54,78 @@ export default {
 
 <style scoped>
 #createPost {
-    width: 80%;
+    max-width: 60%;
+    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
     margin: auto;
-    background: rgba(0, 0, 0, 0.144);
-    padding: 1.8rem;
-    border-radius: 8px;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 4px;
 }
 form {
-    margin-top: 1rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+}
+#top {
+    display: flex;
     align-items: center;
 }
-input {
+#picture {
+    width: 10%;
+    height: 10%;
+    min-width: 64px;
+    min-height: 64px;    
+    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
+    border-radius: 50%;
+    overflow: hidden;
+}
+img {
+    height: 100%;
     width: 100%;
-    box-shadow: 3px 5px 6px 2px rgb(0 0 0 / 10%);
+    object-fit: cover;
+}
+#text {
+    width: 100%;
+    padding: 20px;
+}
+textarea {
+    width: 100%;
+    height: 6rem;
+    padding: 8px;
+}
+#bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid hsla(0, 0%, 0%, 0.5);
+    padding-top: 2rem;
+}
+.btn {
+    background-color: green;
     border-style: none;
-    border-radius: 8px;
     outline: none;
+    width: 20%;
+    border-radius: 8px;
+    height: 40px;
+    color: white;
 }
-.textarea {
-    height: 4rem;
-    padding-left: 1rem;
+.btn:active, .upload:active {
+  transform: scale(0.98);
 }
+p {
+    margin-top: 1.6rem;
+}
+/*
 .uploadFile {
     position: relative;
     margin: 1rem 0 1rem 0;
-    background: rgba(220, 20, 60, 0.712);
-    height: 3rem;
+    background: rgba(128, 0, 128, 0.815);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20%;
     border-radius: 8px;
-    margin: 2rem 2rem 2rem 0;
     color: white;
+    width: 40%;
+    height: 60px;
 }
 .uploadFileInput {
     position: absolute;
@@ -68,16 +133,7 @@ input {
     top: 0;
     opacity: 0.01;
     cursor: pointer;
-    height: 3rem;
-}
-.btn {
-    color: white;
-    background-color: green;
-    height: 3rem;
-    width: 20%;
-    cursor: pointer;
-}
-.btn:active {
-    transform: scale(0.98);
-}
+}*/
+
+
 </style>

@@ -8,7 +8,8 @@
             <router-link to="/login" class="link">Login</router-link>    
         </div>  
         <div id="options" v-else>
-            <router-link to="/" class="link"><i class="fas fa-user"></i> User</router-link>
+            <router-link to="/team" class="link"><i class="fas fa-users"></i> Team</router-link>
+            <router-link to="/user" class="link"><i class="fas fa-user"></i> User</router-link>
             <router-link to="/" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
         </div>    
     </div>
@@ -49,6 +50,5 @@ img {
 .link:hover{
     color: rgb(255, 15, 15);
     box-sizing: content-box;
-    font-weight: bold;
 }
 </style>
