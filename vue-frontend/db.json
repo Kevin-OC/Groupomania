@@ -1,0 +1,28 @@
+{
+    "posts": [
+        {   
+            "id": "1",
+            "creator": "John Doe",
+            "profile": "/img/logo.82b9c7a5.png",
+            "date": "05/07/2021",
+            "text": "My first post",
+            "media": "/img/logo.82b9c7a5.png"
+        },
+        {   
+            "id": "2",
+            "creator": "Jane Doe",
+            "profile": "/img/logo.82b9c7a5.png",
+            "date": "06/07/2021",
+            "text": "My second post",
+            "media": "/img/logo.82b9c7a5.png"
+        },
+        {   
+            "id": "3",
+            "creator": "Joe Doe",
+            "profile": "/img/logo.82b9c7a5.png",
+            "date": "07/07/2021",
+            "text": "My third post",
+            "media": "/img/logo.82b9c7a5.png"
+        }
+    ]
+}

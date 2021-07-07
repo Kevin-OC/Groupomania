@@ -16,43 +16,20 @@ export default {
   },
   data() {
     return {
-      posts: [],
+      posts: []
     };
   },
-  created() {
-    this.posts = [
-      { 
-        userId: 1,
-        postId: 1,
-        profile: "/img/logo.82b9c7a5.png",
-        username: "John Doe",
-        date: "05/07",
-        text: "my Text",
-        file: "/img/logo.82b9c7a5.png",             
-        likes: 21
-      },
-      {
-        userId: 2,
-        postId: 2,
-        profile: "/img/logo.82b9c7a5.png",
-        username: "Jane Doe",
-        date: "05/07",
-        text: "my 2nd Text",
-        file: "/img/logo.82b9c7a5.png",
-        likes: 37
-      },
-      {
-        userId: 3,
-        postId: 3,
-        profile: "/img/logo.82b9c7a5.png",
-        username: "Jack Doe",
-        date: "05/07",
-        text: "my 3d Text",
-        file: "/img/logo.82b9c7a5.png",
-        likes: 73
-      }
-    ];
+  methods: {
+    async fetchPosts() {
+      const res = await fetch('http://localhost:5000/posts')
+      const data = await res.json()
+      return data
+    }
   },
+  async created() {
+    this.posts = await this.fetchPosts()
+    console.log("hello")
+  }
 };
 </script>
 
