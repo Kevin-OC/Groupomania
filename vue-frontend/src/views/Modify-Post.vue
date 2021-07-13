@@ -1,20 +1,20 @@
 <template>
     <Nav redirection="/home" :logged="true" />
-    <Header :home="false" header="Nouveau post" />
-    <CreatePost />
+    <Header :home="false" header="Modification du post" />
+    <ModifyPost />
 </template>
 
 <script>
 import Nav from "../components/Nav.vue"
 import Header from "../components/Header.vue"
-import CreatePost from "../components/CreatePost.vue"
+import ModifyPost from "../components/ModifyPost.vue"
 
 export default {
-    name: 'New-Post',
+    name: 'Modify-Post',
     components: {
         Nav,
         Header,
-        CreatePost
+        ModifyPost
     }
 }
 </script>

@@ -4,9 +4,9 @@
             <div class="profileContainer">
                 <img :src="comment.profile" alt="profile">
             </div>                
-            <div class="usernameContainer">
-                <p class="commentUsername">{{ comment.username }}</p> 
-                <button class="option" @click="option(comment.commentId)">...</button>
+            <div class="creatorContainer">
+                <p class="commentCreator">{{ comment.creator }}</p> 
+                <button class="option" @click="option(comment.id)">...</button>
                 <p class="commentText">{{ comment.text }}</p>                    
             </div>                       
         </div>
@@ -22,8 +22,8 @@ export default {
         commentSection: Boolean
     },
     methods: {
-        option(commentId) {
-            console.log(commentId)
+        option(id) {
+            console.log(id)
         }
     }
 }
@@ -51,14 +51,14 @@ img {
     width: 100%;
     object-fit: cover;
 }
-.usernameContainer {
+.creatorContainer {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     width: 100%;
 }
-.commentUsername {
+.commentCreator {
     padding: 1rem;
 }
 .commentText {

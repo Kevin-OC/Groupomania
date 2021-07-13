@@ -1,15 +1,17 @@
 <template>
     <div id="nav">
         <div id="logo">
-            <router-link :to="redirection"><img src="../assets/logos/icon-left-font.png" alt="logo"></router-link>
+            <router-link :to="redirection">
+                <img src="../assets/logos/icon-left-font.svg" alt="logo">
+            </router-link>
         </div>
         <div id="routes" v-if="!logged">
             <router-link to="/signup" class="link">Sign up</router-link>
             <router-link to="/login" class="link">Login</router-link>    
         </div>  
         <div id="options" v-else>
-            <router-link to="/team" class="link"><i class="fas fa-users"></i> Équipe</router-link>
-            <router-link to="/user" class="link"><i class="fas fa-user"></i> Profil</router-link>
+            <router-link to="/team" class="link"><i class="fas fa-users"></i> Membres</router-link>
+            <router-link :to="path" class="link"><i class="fas fa-user"></i> Profil</router-link>
             <router-link to="/" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
         </div>    
     </div>
@@ -21,6 +23,15 @@ export default {
     props: {
         redirection: String,
         logged: Boolean,
+    },
+    created() {
+        const userId = "1" // <- ici il faudra trouver le userId dynamiquement
+        this.path = `/profile/${userId}`
+    },
+    data() {
+        return {
+            path: ""
+        }
     }
 }
 </script>
@@ -39,7 +50,7 @@ export default {
     width: 100%;  
 }
 img {
-    height: 200px;
+    height: 16rem;
 }
 .link {
     text-align: center;

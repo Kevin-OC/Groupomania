@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <router-view/>
+    <router-view />
     <div id="dot"></div>   
   </div>  
 </template>
@@ -28,6 +28,7 @@ export default {
 }
 #dot {
   margin: auto;
+  margin-top: 1rem;
   height: 10px;
   width: 10px;
   border-radius: 50%;

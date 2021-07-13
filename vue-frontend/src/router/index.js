@@ -29,12 +29,22 @@ const routes = [
     path: '/new-post',
     name: 'New-Post',
     component: () => import('../views/New-Post.vue')
-  },/*
+  },
   {
-    path: '/user',
-    name: 'User',
-    component: () => import('../views/user.vue')
-  }*/
+    path: '/modify-post/:id',
+    name: 'Modify-Post',
+    component: () => import('../views/Modify-Post.vue')
+  },
+  {
+    path: '/team',
+    name: 'Team',
+    component: () => import('../views/Team.vue')
+  },
+  {
+    path: '/profile/:id',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
+  }
 ]
 
 const router = createRouter({

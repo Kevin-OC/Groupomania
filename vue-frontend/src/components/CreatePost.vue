@@ -1,17 +1,17 @@
 <template>
     <div id="createPost">
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="createPost">
             <div id="top">
-                <div id="picture">
-                    <img src="../assets/logo.png" alt="profile pic">
+                <div id="profile">
+                    <img src="../assets/logo.png" alt="profile picture">
                 </div>
                 <div id="text">
-                    <textarea name="textarea" placeholder="Publiez votre message" v-model="dataForm.text"></textarea>
+                    <textarea name="textarea" placeholder="Publiez votre message" v-model="formData.text"></textarea>
                 </div>    
             </div>            
             <div id="bottom">
-                <input type="file" name="file" class="upload" id="file">                  
-                <input type="submit" value="Envoyez !" class="btn">
+                <input type="file" ref="file" name="file" class="upload" id="file" @change="handleFileUpload()"><!-- event type @change="method" this.$ref -->                  
+                <input type="submit" value="J'envoie !" class="btn">
             </div>
             <p>{{errMsg}}</p>
         </form>
@@ -19,34 +19,66 @@
 </template>
 
 <script>
-import router from '../router'
+//import router from '../router'
 export default {
     name: 'CreatePost',
     data() {
         return {
-            dataForm: {
+            formData: {
                 date: null,
                 text: null,
-                file: null
+                file: ""
             },
         errMsg: null
         }
     },
     methods: {
-        onSubmit() {
+        handleFileUpload() {
+            this.formData.file = `img/${this.$refs.file.files[0].name}`
+            console.log(this.formData.file)
+        },
+        createPost() {          
+            if (!this.formData.text) {
+                this.errMsg = "Error => vous devez remplir le champ <message> pour créer une nouvelle publication!"
+                return
+            }
+
+            this.formData.date = new Date()
+
+            fetch( '/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.formData)
+            })
+            .then(() => {
+                console.log(this.formData)
+                //router.push({ path: 'home' })
+            })
+            .catch(error => {console.log(error)})
+
+            /*
             this.dataForm.date = new Date();
             this.dataForm.file = document.getElementById('file').value;
             const data = {
-                date: this.dataForm.date,
-                text: this.dataForm.text,
-                file: this.dataForm.file
+                ...this.dataForm
             }            
             if (!data.text) {
-                this.errMsg = "Error => vous devez remplir le champ message pour poster!"
+                this.errMsg = "Error => vous devez remplir le champ message pour créer une nouvelle publication!"
                 return
             }
-            console.log(data)
-            router.push({ path: 'home' })
+            console.log(data)            
+            
+            fetch('/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(router.push({ path: 'home' }))
+            .catch(error => {console.error(error)})*/
         }
     }
 }
@@ -69,7 +101,7 @@ form {
     display: flex;
     align-items: center;
 }
-#picture {
+#profile {
     width: 10%;
     height: 10%;
     min-width: 64px;
@@ -134,6 +166,4 @@ p {
     opacity: 0.01;
     cursor: pointer;
 }*/
-
-
 </style>

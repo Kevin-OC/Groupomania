@@ -14,7 +14,7 @@
 
 <script>
 import Nav from '../components/Nav.vue'
-import router from '../router'
+//import router from '../router'
 export default {
   name: 'Login',
   components: {
@@ -40,19 +40,18 @@ export default {
         this.errMsg = "Err! Remplissez tous les champs du formulaire"
         return
       }
-      // affiche en console data (les valeurs entrées par l'user)
       console.log(data)
-      // redirection vers la route '/home'
-      router.push({ path: 'home' })
-      // fonction fetch pour POST au backend les datas
-      /*fetch('http://localhost:3000/api/user', {
-        method: 'POST',
+      //let req = JSON.stringify(data.email)
+      fetch(`api/users/${data}`, {
+        method: 'GET',
         headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(data)
+          'Content-Type': 'application/json'
+        }
       })
-      .catch(error => {console.error(error)});*/
+      //.then(router.push({ path: 'home' }))
+      .then((res) => res.json())
+      .then(result => {console.log(result)}) // boucle ici sur user (à voir)
+      .catch(error => {console.error(error)})
     }
   }
 }

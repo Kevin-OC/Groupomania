@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!posts" id="postsContainer">
+    <div v-if="posts" id="postsContainer">
         <div :key="post.id" v-for="post in posts" class="post">
             <div class="header">
                 <div class="profileContainer">
@@ -10,17 +10,20 @@
                         <h4>{{ post.creator }}</h4>
                         <p>posté le {{ post.date }}</p>    
                     </div>                 
-                    <button class="option" @click="optionBtn(post)">...</button>
+                    <div class="optionsBtn">
+                        <button @click="modifyPost(post.id)"><i class="far fa-edit modify"></i>modifier</button>
+                        <button @click="deletePost(post.id)"><i class="far fa-trash-alt delete"></i>supprimer</button>    
+                    </div>
                 </div>                               
             </div>
             <p class="text">{{ post.text }}</p>
-            <div class="mediaContainer">          
-                <img :src="post.media" :alt="post.media" class="media">
+            <div v-if="post.file" class="fileContainer">          
+                <img :src="post.file" :alt="post.file" class="file">
             </div>
-            <p class="like"><i class="fas fa-thumbs-up"></i> {{ post.likes }}</p>
+            <p class="like"><i class="fas fa-thumbs-up likeCount"></i> {{ post.likes }}</p>
             <div class="interaction">
-                <button class="btn"><i class="far fa-thumbs-up" ></i> J'aime</button>
-                <button class="btn" @click="toggleComment(post)"><i class="far fa-comment"></i> Commentaires</button>
+                <button class="btn"><i class="far fa-thumbs-up likeBtn"></i> J'aime</button>
+                <button class="btn" @click="toggleComment(post.id)"><i class="far fa-comment"></i> Commentaires</button>
             </div>
             <Comments :commentSection="showComment" :comments="comments" />   
         </div>     
@@ -32,6 +35,7 @@
 
 <script>
 import Comments from "../components/Comments.vue"
+import router from '../router'
 export default {
     name: 'Posts',
     components: {
@@ -42,17 +46,34 @@ export default {
     },
     data() {
         return {
+            comments: [],
             showComment: false
         }
     },
     methods: {
-        optionBtn(post) {
-            console.log(post)
+        async fetchComments() {
+            const res = await fetch('api/comments')
+            const data = await res.json()
+            return data
         },
-        toggleComment(post) {
-            console.log(post)
+        async deletePost(id) {
+            if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
+                const res = await fetch(`api/posts/${id}`, {
+                    method: 'DELETE'
+                }) 
+                res.status === 200 ? this.$emit('deletePost-emit', id) : console.log('une erreur s\'est produite')
+            }
+        },
+        modifyPost(id) {
+            router.push({ path: `/modify-post/${id}` })
+        },
+        toggleComment(id) {
+            console.log(id)
             this.showComment = !this.showComment;
         }
+    },
+    async created() {
+        this.comments = await this.fetchComments()
     }
 }
 </script>
@@ -95,14 +116,17 @@ export default {
     width: 100%;
     object-fit: cover;
 }
+.modify, .delete {
+    margin: 0 0.2rem 0 1rem;
+}
 .text {
     margin: 1.4rem 0 1.4rem 0;
 }
-.mediaContainer {
+.fileContainer {
     overflow: hidden;
     text-align: center;
 }
-.media {
+.file {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.1)
@@ -112,14 +136,6 @@ button {
     border-style: none;
     outline: none;   
 }
-.option {
-    font-size: 2rem;
-    color: rgba(0, 0, 0, 0.7);
-}
-.option:hover {
-    color: black;
-    transform: scale(1.04);
-}
 .interaction {
     display: flex;
     justify-content: space-around;
@@ -127,7 +143,7 @@ button {
 .like {
     margin: 1rem 0 1rem 0;
 }
-.fas {
+.likeCount {
     color: white;
     background-color: #3174e4;
     border-radius: 50%;

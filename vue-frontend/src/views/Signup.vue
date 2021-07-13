@@ -63,19 +63,19 @@ export default {
       if(!(regexPassword.test(data.password))) {
         this.errMsg = "Password Err! => entre 8 et 32 caractères + 1 minuscule min + 1 maj min + 1 caractère spécial"
       }
-      // affiche en console data (les valeurs entrées par l'user)
+
+      // affiche en console le body que l'on va envoyer au backend
       console.log(data)
-      // redirection vers la route '/home'
-      router.push({ path: 'home' })
-      // fonction fetch pour POST au backend les datas
-      /*fetch('http://localhost:3000/api/user', {
+      // envoi à l'API
+      fetch('/api/users', {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       })
-      .catch(error => {console.error(error)});*/
+      .then(router.push({ path: 'home' }))
+      .catch(error => {console.error(error)})
     }
   }
 }
