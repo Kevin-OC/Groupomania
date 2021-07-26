@@ -24,8 +24,9 @@ export default {
   },
   methods: {
     async fetchPosts() {
-      const res = await fetch('api/posts')
+      const res = await fetch('http://localhost:3000/api/posts')
       const data = await res.json()
+      console.log(data)
       return data
     },
     deletePostFrontend(id) {

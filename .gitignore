@@ -1,4 +1,5 @@
-backend
+# backend
+backend/node_modules
 
 # vue-frontend files
 vue-frontend/src/assets

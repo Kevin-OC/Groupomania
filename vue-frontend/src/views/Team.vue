@@ -7,7 +7,7 @@
                 <img :src="user.profile" alt="photo de profil" class="profile">    
             </div>
             <div>
-                <p>{{user.username}}</p>    
+                <p>{{user.firstname}} {{user.lastname}}</p>
             </div>            
         </div>    
     </div>    
@@ -29,8 +29,9 @@ export default {
     },
     methods: {
         async fetchUsers() {
-            const res = await fetch('api/users')
+            const res = await fetch('http://localhost:3000/api/users')
             const data = await res.json()
+            console.log(data)
             return data
         }
     },
@@ -42,10 +43,11 @@ export default {
 
 <style scoped>
 #usersContainer {
-    width: 80%;
+    width: 40%;
     margin: auto;
     border-radius: 4px;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
 }
 .user {

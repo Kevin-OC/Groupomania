@@ -11,7 +11,7 @@
             </div>            
             <div id="bottom">
                 <label for="file">ancien fichier: {{post.file}}</label>                
-                <input type="file" name="file" class="upload" id="file"><!-- event type @change="method" this.$ref -->             
+                <input type="file" name="file" class="upload" id="file">          
                 <input type="submit" value="Je modifie !" class="btn">
             </div>
             <p>{{errMsg}}</p>
@@ -23,10 +23,12 @@
 export default {
     name: 'ModifyPost',
     beforeCreate() {
-        fetch(`/api/posts/${this.$route.params.id}`)
+        fetch('http://localhost:3000/api/posts')
         .then(res => res.json())
         .then(data => {
-            this.post = data
+            let currentPostId = this.$route.params.id - 1
+            this.post = data[currentPostId]
+            console.log(data)
         })
         .catch(error => {console.error(error)})
     },

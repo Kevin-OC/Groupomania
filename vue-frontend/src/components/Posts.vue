@@ -52,13 +52,13 @@ export default {
     },
     methods: {
         async fetchComments() {
-            const res = await fetch('api/comments')
+            const res = await fetch('http://localhost:3000/api/comments')
             const data = await res.json()
             return data
         },
         async deletePost(id) {
             if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
-                const res = await fetch(`api/posts/${id}`, {
+                const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
                     method: 'DELETE'
                 }) 
                 res.status === 200 ? this.$emit('deletePost-emit', id) : console.log('une erreur s\'est produite')

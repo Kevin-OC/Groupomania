@@ -2,7 +2,7 @@
     <div id="createPost">
         <form @submit.prevent="createPost">
             <div id="top">
-                <div id="profile">
+                <div id="profileContainer">
                     <img src="../assets/logo.png" alt="profile picture">
                 </div>
                 <div id="text">
@@ -29,31 +29,36 @@ export default {
                 text: null,
                 file: ""
             },
-        errMsg: null
+            special: "",
+            errMsg: null
         }
     },
     methods: {
         handleFileUpload() {
-            this.formData.file = `img/${this.$refs.file.files[0].name}`
-            console.log(this.formData.file)
+            this.special = this.$refs.file.files[0]
+            console.log(this.special)
+            let uploadedFile = new FormData()
+            uploadedFile.append('file', this.special)
         },
-        createPost() {          
+        createPost() {    
+            
+
             if (!this.formData.text) {
                 this.errMsg = "Error => vous devez remplir le champ <message> pour créer une nouvelle publication!"
                 return
             }
 
-            this.formData.date = new Date()
+            //this.formData.date = new Date()
 
             fetch( '/api/posts', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 },
-                body: JSON.stringify(this.formData)
+                body: JSON.stringify(this.special)
             })
             .then(() => {
-                console.log(this.formData)
+                console.log(this.special)
                 //router.push({ path: 'home' })
             })
             .catch(error => {console.log(error)})
@@ -101,7 +106,7 @@ form {
     display: flex;
     align-items: center;
 }
-#profile {
+#profileContainer {
     width: 10%;
     height: 10%;
     min-width: 64px;

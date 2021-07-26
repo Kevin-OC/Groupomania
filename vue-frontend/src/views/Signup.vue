@@ -3,10 +3,10 @@
   <div id="signupForm">
     <h3>Signup</h3>
     <form @submit.prevent="onSubmit">
-      <input type="text" name="username" placeholder="Username" v-model="dataForm.username">
+      <input type="text" name="firstname" placeholder="Prénom" v-model="dataForm.firstname">
+      <input type="text" name="lastname" placeholder="Nom" v-model="dataForm.lastname">
       <input type="email" name="email" placeholder="Email" v-model="dataForm.email">
       <input type="password" name="password" placeholder="Mot de passe" v-model="dataForm.password">
-      <input type="password" name="confirm" placeholder="Confirmation mot de passe" v-model="dataForm.confirm">
       <input type="submit" value="Je m'inscris !" class="btn">
     </form>
     <h4>{{ errMsg }}</h4>
@@ -25,10 +25,10 @@ export default {
   data() {
     return {
       dataForm: {
-        username: null,
+        firstname: null,
+        lastname: null,
         email: null,
         password: null,
-        confirm: null  
       },
       errMsg: null
     }
@@ -40,21 +40,18 @@ export default {
         ...this.dataForm
       }
       // vérifie si tous les champs sont bien remplis
-      if (!data.username || !data.email || !data.password) {
+      if (!data.firstname || !data.lastname || !data.email || !data.password) {
         this.errMsg = "Err! Remplissez tous les champs du formulaire"
         return
       }
-      if (data.password !== data.confirm) {
-        this.errMsg = "Err! Le mot de passe et la confirmation du mot de passe ne sont pas les mêmes";
-        return
-      }
+    
       // nos regex
-      const regexUsername = /^(?=.{4,20}$)(?:[a-zA-Z\d]+(?:(?:\.|-|_)[a-zA-Z\d])*)+$/g;
+      const regexName = /^[a-zéèçàêïü]{2,50}(-| )?([a-zéèçà]{2,50})?$/gmi;
       const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
       const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
       // nos véfifications
-      if (!(regexUsername.test(data.username))) {
-        this.errMsg = "Username Err! => entre 4 et 20 caractères + alphanumérique seulement + pas d'accent ni espaces";
+      if (!(regexName.test(data.firstname && data.lastname))) {
+        this.errMsg = "Name Err! => format nom et/ou prénom incorrect";
         return
       }
       if (!(regexEmail.test(data.email))) {
@@ -67,11 +64,12 @@ export default {
       // affiche en console le body que l'on va envoyer au backend
       console.log(data)
       // envoi à l'API
-      fetch('/api/users', {
+      fetch('http://localhost:3000/api/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify(data),
       })
       .then(router.push({ path: 'home' }))
