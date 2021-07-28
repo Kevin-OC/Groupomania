@@ -15,7 +15,7 @@ router.post('/login', userCtrl.login)
 router.put('/:id', auth, userCtrl.editUser);
 
 /* route affichage ensemble des users */
-router.get('/', userCtrl.getAllUsers);
+router.get('/all', userCtrl.getAllUsers);
 
 /* route affichage user connecté */
 router.get('/:id', userCtrl.getOneUser);

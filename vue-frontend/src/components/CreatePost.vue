@@ -10,7 +10,7 @@
                 </div>    
             </div>            
             <div id="bottom">
-                <input type="file" ref="file" name="file" class="upload" id="file" @change="handleFileUpload()"><!-- event type @change="method" this.$ref -->                  
+                <input type="file" ref="file" name="file" class="upload" id="file" @change="handleFileUpload()">             
                 <input type="submit" value="J'envoie !" class="btn">
             </div>
             <p>{{errMsg}}</p>
@@ -19,71 +19,37 @@
 </template>
 
 <script>
-//import router from '../router'
+import router from '../router'
 export default {
     name: 'CreatePost',
     data() {
         return {
             formData: {
-                date: null,
                 text: null,
                 file: ""
             },
-            special: "",
             errMsg: null
         }
     },
     methods: {
         handleFileUpload() {
-            this.special = this.$refs.file.files[0]
-            console.log(this.special)
-            let uploadedFile = new FormData()
-            uploadedFile.append('file', this.special)
+            this.formData.file = this.$refs.file.files[0].name
         },
-        createPost() {    
-            
-
+        createPost() {       
             if (!this.formData.text) {
                 this.errMsg = "Error => vous devez remplir le champ <message> pour créer une nouvelle publication!"
                 return
             }
-
-            //this.formData.date = new Date()
-
-            fetch( '/api/posts', {
+            fetch( 'http://localhost:3000/api/posts', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    //'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.special)
+                body: JSON.stringify(this.formData)
             })
-            .then(() => {
-                console.log(this.special)
-                //router.push({ path: 'home' })
-            })
+            .then(router.push({ path: '/home' }))
             .catch(error => {console.log(error)})
-
-            /*
-            this.dataForm.date = new Date();
-            this.dataForm.file = document.getElementById('file').value;
-            const data = {
-                ...this.dataForm
-            }            
-            if (!data.text) {
-                this.errMsg = "Error => vous devez remplir le champ message pour créer une nouvelle publication!"
-                return
-            }
-            console.log(data)            
-            
-            fetch('/api/posts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(router.push({ path: 'home' }))
-            .catch(error => {console.error(error)})*/
         }
     }
 }

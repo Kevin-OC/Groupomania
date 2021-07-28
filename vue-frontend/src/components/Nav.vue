@@ -12,12 +12,13 @@
         <div id="options" v-else>
             <router-link to="/team" class="link"><i class="fas fa-users"></i> Membres</router-link>
             <router-link :to="path" class="link"><i class="fas fa-user"></i> Profil</router-link>
-            <router-link to="/" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
+            <button @click="logout" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
         </div>    
     </div>
 </template>
 
 <script>
+import router from '../router'
 export default {
     name: 'Nav',
     props: {
@@ -31,6 +32,15 @@ export default {
     data() {
         return {
             path: ""
+        }
+    },
+    methods: {
+        logout() {
+            if (confirm("Souhaitez-vous vous déconnecter ?")) {
+                fetch('http://localhost:3000/logout')
+                .then(router.push({ path: '/' }))
+                .catch(error => console.error(error))    
+            }            
         }
     }
 }

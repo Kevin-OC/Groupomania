@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 /* logique pour créer un user */
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
     bcrypt.hash(req.body.password, 8)
         .then(hash => {
             const user = new User({
@@ -14,8 +14,8 @@ exports.signup = (req, res, next) => {
             let { firstname, lastname, email, password } = user;
             User.create({firstname, lastname, email, password})
                 .then(newUser => {
-                console.log("nouvel user enregistré:", newUser.firstname, newUser.lastname);
-                res.status(201).json({message: 'User créé'});
+                console.log("nouvel user enregistré:", newUser.firstname, newUser.lastname);                
+                res.status(201).json({userId: newUser.id});
                 })
                 .catch(error => res.status(400).json({error}))
         })    
@@ -23,23 +23,24 @@ exports.signup = (req, res, next) => {
 };
 
 /* logique pour authentifier un user */
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     User.findOne({where: {email:req.body.email}})
         .then(user => {
+            if (!user) {
+                return res.status(401).json({ error: 'User non trouvé !'});
+            };
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        console.log("Email ou mot de passe incorrect !");
-                        return res.status(401).json({ error: 'Email ou mot de passe incorrect !' });   
+                        return res.status(401).json({ error: 'Mot de passe incorrect !'});   
                     };
-                    res.status(201).json({
+                    res.status(200).json({
                         userId: user.id,
                         token: jwt.sign(
-                            { userId: user._id },
+                            { userId: user.id },
                             '###monTokenPasEncoreAléatoire!###', // <- notre TOKEN provisoire (à remplacer par process.env.TOKEN ensuite)
                             { expiresIn: '24h' })
-                    }).redirect('http://localhost:8080/home');
-                    console.log("Bienvenue", user.firstname);                   
+                    });               
                 })
                 .catch(error => res.status(400).json({error}));
         }) 
@@ -47,11 +48,11 @@ exports.login = (req, res, next) => {
 }
 
 /* logique pour update un user */
-exports.editUser = (req, res, next) => {
+exports.editUser = (req, res) => {
     console.log("User édité");
     res.status(201).json({message: 'User édité'});
 };/*
-exports.editPost = (req, res, next) => {
+exports.editPost = (req, res) => {
     try {
         Post.update(req.body, {where: {id: req.params.id}})
             .then(post => {
@@ -65,7 +66,7 @@ exports.editPost = (req, res, next) => {
 };*/
 
 /* logique pour afficher tous les users */
-exports.getAllUsers = (req, res, next) => {
+exports.getAllUsers = (req, res) => {
     try {
         User.findAll()
             .then(users => {
@@ -78,7 +79,7 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 /* logique pour afficher un user  */
-exports.getOneUser = (req, res, next) => {
+exports.getOneUser = (req, res) => {
     try {
         User.findOne({where: {id:req.params.id}})
             .then(user => {
@@ -92,7 +93,7 @@ exports.getOneUser = (req, res, next) => {
 };
 
 /* logique pour supprimer un user */
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
     console.log(req.params.id);
     try {
         User.destroy({where: {id:req.params.id}})

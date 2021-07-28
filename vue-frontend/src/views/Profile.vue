@@ -37,8 +37,7 @@ export default {
         fetch(`http://localhost:3000/api/users/${this.$route.params.id}`)
         .then(res => res.json())
         .then(data => {
-            this.user = data
-            
+            this.user = data            
         })
         .catch(error => {error})
     },

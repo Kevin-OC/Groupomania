@@ -49,7 +49,7 @@ export default {
         },
         body: JSON.stringify(data)
       })
-      .then(router.push({ path: 'home' }))
+      .then(res => res.status === 200 ? router.push({ path: 'home' }) : this.errMsg = "Email ou mot de passe incorrect")
       .catch(error => {console.error(error)})
     }
   }

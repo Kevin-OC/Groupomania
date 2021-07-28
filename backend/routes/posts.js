@@ -6,19 +6,19 @@ const auth = require('../middleware/auth.js'); // <- ajouter ce middleware à to
 /* '/' = https://localhost:3000/api/posts */
 
 /* route création post */
-router.post('/', postCtrl.createPost);
+router.post('/', auth, postCtrl.createPost);
 
 /* route modification post */
-router.put('/:id', postCtrl.editPost);
+router.put('/:id', auth, postCtrl.editPost);
 
 /* route affichage ensemble des posts */
-router.get('/', postCtrl.getAllPosts);
+router.get('/', auth, postCtrl.getAllPosts);
 
 /* route affichage post connecté */
-router.get('/:id', postCtrl.getOnePost);
+router.get('/:id', auth, postCtrl.getOnePost);
 
 /* route suppression post */
-router.delete('/:id', postCtrl.deletePost);
+router.delete('/:id', auth, postCtrl.deletePost);
 
 /* exports */
 module.exports = router;

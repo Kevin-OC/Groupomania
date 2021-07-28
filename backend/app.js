@@ -28,9 +28,14 @@ app.use((req, res, next) => {
 /* middleware qui va parser et return un objet json */
 app.use(express.json());
 
-/* routage pour tout ce qui concerne les users */
+/* logique routage */
 app.use('/api/users', usersRoutes);
 app.use('/api/posts', postsRoutes);
+
+/* déconnexion */
+app.get('/logout', (req, res) => {
+    res.status(200);
+});
 
 /* exports */
 module.exports = app;
