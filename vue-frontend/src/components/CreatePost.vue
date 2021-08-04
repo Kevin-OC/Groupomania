@@ -3,14 +3,14 @@
         <form @submit.prevent="createPost">
             <div id="top">
                 <div id="profileContainer">
-                    <img src="../assets/logo.png" alt="profile picture">
+                    <img src="../assets/vuejs.png" alt="profile picture">
                 </div>
                 <div id="text">
-                    <textarea name="textarea" placeholder="Publiez votre message" v-model="formData.text"></textarea>
+                    <textarea name="textarea" placeholder="Publiez votre message" v-model="text"></textarea>
                 </div>    
             </div>            
             <div id="bottom">
-                <input type="file" ref="file" name="file" class="upload" id="file" @change="handleFileUpload()">             
+                <input type="file" ref="file" name="file" class="upload" id="file" @change="selectFile">             
                 <input type="submit" value="J'envoie !" class="btn">
             </div>
             <p>{{errMsg}}</p>
@@ -20,36 +20,40 @@
 
 <script>
 import router from '../router'
+import axios from 'axios';
 export default {
     name: 'CreatePost',
     data() {
         return {
-            formData: {
-                text: null,
-                file: ""
-            },
+            text: null,
+            file: '',
             errMsg: null
         }
     },
     methods: {
-        handleFileUpload() {
-            this.formData.file = this.$refs.file.files[0].name
+        selectFile() {
+            this.file = this.$refs.file.files[0]
         },
         createPost() {       
-            if (!this.formData.text) {
+            if (!this.text) {
                 this.errMsg = "Error => vous devez remplir le champ <message> pour créer une nouvelle publication!"
                 return
             }
-            fetch( 'http://localhost:3000/api/posts', {
-                method: 'POST',
+            
+            let formData = new FormData()
+            formData.append('text', this.text)
+            formData.append('file', this.file)
+            formData.append('userId', localStorage.getItem('userId'))
+            console.log(formData.get('file'))
+
+            axios.post('http://localhost:3000/api/posts/create', formData, {
                 headers: {
-                    //'Content-Type': 'multipart/form-data'
-                    'Content-Type': 'application/json'
+                    //'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify(this.formData)
             })
-            .then(router.push({ path: '/home' }))
-            .catch(error => {console.log(error)})
+                .then(router.push({ path: '/home' }))
+                .catch(error => {console.log(error)})
         }
     }
 }

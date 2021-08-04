@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const postCtrl = require('../controllers/post.js');
-const auth = require('../middleware/auth.js'); // <- ajouter ce middleware à toutes les routes que l'on veut protéger (à placer avant les controllers)
+const auth = require('../middleware/auth.js'); // <- middleware d'authentification (routes à protéger)
+const multer = require('../middleware/multer-config.js'); // <- middleware de gestion des images
 
 /* '/' = https://localhost:3000/api/posts */
 
 /* route création post */
-router.post('/', auth, postCtrl.createPost);
+router.post('/create', auth, multer, postCtrl.createPost);
 
 /* route modification post */
-router.put('/:id', auth, postCtrl.editPost);
+router.put('/:id', auth, multer, postCtrl.editPost);
 
 /* route affichage ensemble des posts */
-router.get('/', auth, postCtrl.getAllPosts);
+router.get('/all', auth, postCtrl.getAllPosts);
 
 /* route affichage post connecté */
 router.get('/:id', auth, postCtrl.getOnePost);

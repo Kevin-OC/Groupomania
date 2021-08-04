@@ -8,9 +8,9 @@ exports.getAllPosts = (req, res) => {
             .then(posts => {
                 res.status(200).json(posts);
             })
-            .catch(error => res.status(400).json({error}))
+            .catch(error => res.status(400).json(error))
     } catch {
-        error => res.status(500).json({error});
+        error => res.status(500).json(error);
     }
 };
 
@@ -22,17 +22,23 @@ exports.getOnePost = (req, res) => {
 
 /* logique pour créer un post */
 exports.createPost = (req, res) => {
+    if (req.file) {
+        req.body.file = req.file.filename;
+    } else {
+        req.body.file = null;
+    };
     try {
-        let { text, file } = req.body;
-        Post.create({text, file})
+        console.log(req.body);
+        let { text, file, userId } = req.body;
+        Post.create({text, file, userId})
             .then(newPost => {
                 console.log("nouveau post créé", newPost);
                 res.status(201);
             })
-            .catch(error => res.status(400).json({error}))    
+            .catch(error => res.status(400).json(error))
     } catch {
-        error => res.status(500).json({error});
-    }    
+        error => res.status(500).json(error);
+    }  
 };
 
 /* logique pour modifier un post */
@@ -43,28 +49,23 @@ exports.editPost = (req, res) => {
                 console.log("post modifié:", post)
                 res.status(201).json(post);
             })
-            .catch(error => res.status(400).json({error}))
+            .catch(error => res.status(400).json(error))
     } catch {
-        error => res.status(500).json({error});
+        error => res.status(500).json(error);
     }
-};
-
-exports.deleteUser = (req, res) => {
-    try {
-        User.destroy({where : req.params.id})
-            .then(user => {
-                console.log("User deleted");
-                res.status(200).json(user);
-            })
-            .catch(error => res.status(400).json({error}))
-    } catch {
-        error => res.status(500).json({error});
-    }
-    res.status(201).json({message: 'User deleted'});
 };
 
 /* logique pour supprimer un post */
 exports.deletePost = (req, res) => {
-    console.log("Post supprimé")
-    res.status(201).json({message: 'Post supprimé'});
+    try {
+        console.log(req.params.id);
+        Post.destroy({where: {id:req.params.id}})
+            .then(post => {
+                console.log("Post supprimé");
+                res.status(200).json(post);
+            })
+            .catch(error => res.status(400).json(error))
+    } catch {
+        error => res.status(500).json(error);
+    }
 };

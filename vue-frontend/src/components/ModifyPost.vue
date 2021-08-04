@@ -3,7 +3,7 @@
         <form @submit.prevent="modifyPost">
             <div id="top">
                 <div id="profile">
-                    <img src="../assets/logo.png" alt="profile picture">
+                    <img src="../assets/vuejs.png" alt="profile picture">
                 </div>
                 <div id="text">
                     <textarea name="textarea" v-model="post.text"></textarea>

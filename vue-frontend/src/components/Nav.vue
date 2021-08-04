@@ -11,36 +11,24 @@
         </div>  
         <div id="options" v-else>
             <router-link to="/team" class="link"><i class="fas fa-users"></i> Membres</router-link>
-            <router-link :to="path" class="link"><i class="fas fa-user"></i> Profil</router-link>
-            <button @click="logout" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+            <router-link to="/profile" class="link"><i class="fas fa-user"></i> Profil</router-link>
+            <router-link to="/" @click="logout" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
         </div>    
     </div>
 </template>
 
 <script>
-import router from '../router'
 export default {
     name: 'Nav',
     props: {
         redirection: String,
         logged: Boolean,
     },
-    created() {
-        const userId = "1" // <- ici il faudra trouver le userId dynamiquement
-        this.path = `/profile/${userId}`
-    },
-    data() {
-        return {
-            path: ""
-        }
-    },
     methods: {
         logout() {
-            if (confirm("Souhaitez-vous vous déconnecter ?")) {
-                fetch('http://localhost:3000/logout')
-                .then(router.push({ path: '/' }))
-                .catch(error => console.error(error))    
-            }            
+            // pour déconnecter l'user on appelle la méthode clear() pour effacer tous les items dans localStorage
+            localStorage.clear()
+            console.log("user déconnecté")          
         }
     }
 }

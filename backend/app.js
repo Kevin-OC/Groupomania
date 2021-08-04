@@ -2,9 +2,11 @@
 const express = require('express');
 const mysql = require('mysql2');
 const database = require('./config/database.js');
+const path = require('path');
 /* imports routes */
 const usersRoutes = require('./routes/users.js');
 const postsRoutes = require('./routes/posts.js');
+const commentsRoutes = require('./routes/comments.js');
 
 /* notre app est une application express() */
 const app = express();
@@ -16,6 +18,8 @@ try {
 } catch (error) {
     console.error('Unable to connect sequelize to the database:', error);
 }
+/* Création des tables MySQL si elles n'existent pas */
+//sequelize.sync({ force: true });
 
 /* middleware général pour établir les autorisations (*, CORS, METHODS) */
 app.use((req, res, next) => {
@@ -31,11 +35,8 @@ app.use(express.json());
 /* logique routage */
 app.use('/api/users', usersRoutes);
 app.use('/api/posts', postsRoutes);
-
-/* déconnexion */
-app.get('/logout', (req, res) => {
-    res.status(200);
-});
+app.use('/api/comments', commentsRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 /* exports */
 module.exports = app;

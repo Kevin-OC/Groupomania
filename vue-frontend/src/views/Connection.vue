@@ -1,3 +1,3 @@
 <script>
-console.log('redirection -> localhost:8080/login')
+console.log('connection to Groupomania')
 </script>

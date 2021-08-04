@@ -1,5 +1,5 @@
 <template>
-    <div v-if="posts" id="postsContainer">
+    <div v-if="posts.length > 0" id="postsContainer">
         <div :key="post.id" v-for="post in posts" class="post">
             <div class="header">
                 <div class="profileContainer">
@@ -28,7 +28,7 @@
             <Comments :commentSection="showComment" :comments="comments" />   
         </div>     
     </div>
-    <div v-else>
+    <div id="noPost" v-else>
         <p>Il n'y a pas encore de publications! Cliquez sur "créer un post" pour en faire une.</p>
     </div>  
 </template>
@@ -60,7 +60,8 @@ export default {
             if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
                 const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
                     method: 'DELETE'
-                }) 
+                })
+                console.log(id)
                 res.status === 200 ? this.$emit('deletePost-emit', id) : console.log('une erreur s\'est produite')
             }
         },
@@ -148,5 +149,8 @@ button {
     background-color: #3174e4;
     border-radius: 50%;
     padding: 0.5rem;
+}
+#noPost {
+    margin: 2rem;
 }
 </style>

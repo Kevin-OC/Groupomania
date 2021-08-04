@@ -4,7 +4,7 @@
     <div id="usersContainer">            
         <div :key="user.id" v-for="user in users" class="user">
             <div class="profileContainer">
-                <img :src="user.profile" alt="photo de profil" class="profile">    
+                <img :src="imgPath + user.profile" :alt="user.profile" class="profile">    
             </div>
             <div>
                 <p>{{user.firstname}} {{user.lastname}}</p>
@@ -24,7 +24,8 @@ export default {
     },
     data() {
         return {
-            users: []
+            users: [],
+            imgPath: "http://localhost:3000/images/"
         }
     },
     methods: {
@@ -64,7 +65,6 @@ export default {
     height: 8%;
     min-width: 64px;
     min-height: 64px;    
-    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
     border-radius: 50%;
     overflow: hidden;
 }

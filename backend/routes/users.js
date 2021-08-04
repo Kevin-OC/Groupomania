@@ -18,10 +18,10 @@ router.put('/:id', auth, userCtrl.editUser);
 router.get('/all', userCtrl.getAllUsers);
 
 /* route affichage user connecté */
-router.get('/:id', userCtrl.getOneUser);
+router.get('/:id', auth, userCtrl.getOneUser);
 
 /* route suppression user */
-router.delete('/:id', userCtrl.deleteUser);
+router.delete('/:id', auth, userCtrl.deleteUser);
 
 /* exports */
 module.exports = router;
