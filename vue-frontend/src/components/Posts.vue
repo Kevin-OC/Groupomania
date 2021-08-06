@@ -35,7 +35,7 @@
 
 <script>
 import Comments from "../components/Comments.vue"
-import router from '../router'
+//import router from '../router'
 export default {
     name: 'Posts',
     components: {
@@ -51,19 +51,22 @@ export default {
         }
     },
     methods: {
-        async fetchComments() {
+        deletePost(id) {
+            if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
+                    fetch(`http://localhost:3000/api/posts/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }                        
+                    })
+                        .then(location.reload())
+                        .catch(error => console.log(error))
+            }
+        },
+        /*async fetchComments() {
             const res = await fetch('http://localhost:3000/api/comments')
             const data = await res.json()
-            return data
-        },
-        async deletePost(id) {
-            if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
-                const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
-                    method: 'DELETE'
-                })
-                console.log(id)
-                res.status === 200 ? this.$emit('deletePost-emit', id) : console.log('une erreur s\'est produite')
-            }
+            return data        
         },
         modifyPost(id) {
             router.push({ path: `/modify-post/${id}` })
@@ -74,7 +77,7 @@ export default {
         }
     },
     async created() {
-        this.comments = await this.fetchComments()
+        this.comments = await this.fetchComments()*/
     }
 }
 </script>

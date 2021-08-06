@@ -24,6 +24,7 @@ export default {
     },
     methods: {
         deletePostFrontend(id) {
+            console.log("delete emit frontend")
             this.posts = this.posts.filter((post) => post.id !== id)
         }
     },

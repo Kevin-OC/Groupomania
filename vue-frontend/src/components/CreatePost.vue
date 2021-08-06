@@ -51,9 +51,9 @@ export default {
                     //'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 },
-            })
+            })  
                 .then(router.push({ path: '/home' }))
-                .catch(error => {console.log(error)})
+                .catch(error => console.log(error))
         }
     }
 }

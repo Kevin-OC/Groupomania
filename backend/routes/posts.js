@@ -13,7 +13,7 @@ router.post('/create', auth, multer, postCtrl.createPost);
 router.put('/:id', auth, multer, postCtrl.editPost);
 
 /* route affichage ensemble des posts */
-router.get('/all', auth, postCtrl.getAllPosts);
+router.get('/all', postCtrl.getAllPosts);
 
 /* route affichage post connecté */
 router.get('/:id', auth, postCtrl.getOnePost);

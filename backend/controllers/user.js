@@ -1,6 +1,7 @@
 const User = require('../models/User.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 /* logique pour créer un user */
 exports.signup = (req, res) => {
@@ -47,17 +48,33 @@ exports.login = (req, res) => {
 }
 
 /* logique pour update un user */
-exports.editUser = (req, res) => {
-    try {
-        User.update(req.body, {where: {id: req.params.id}})
+exports.editUser = (req, res) => {    
+    req.file ? req.body.profile = req.file.filename : console.log("on garde la même photo"); // <- on vérifie si l'user a uploadé une nouvelle photo
+    if (req.file) { // <- on supprime l'ancienne image de profil
+        User.findOne({where: {id:req.params.id}})
             .then(user => {
-                console.log("user édité:", user)
-                res.status(201).json(user);
+                fs.unlink(`images/${user.profile}`, (error) => {
+                    if (error) throw err
+                })
             })
-            .catch(error => res.status(400).json(error))
-    } catch {
-        error => res.status(500).json(error);
+            .catch(error => res.status(400).json(error));
     }
+    if (req.body.password) { // <- si le password a été modifié on enregistre le hash
+        bcrypt.hash(req.body.password, 8)
+            .then(hash => {
+                req.body.password = hash;
+                User.update(req.body, {where: {id: req.params.id}})
+                    .then(user => {
+                        res.status(201).json({message: "profil et mot de passe changé"});
+                    })
+                    .catch(error => res.status(400).json(error));
+            })
+            .catch(error => res.status(500).json(error));
+    } else { // <- le password n'a pas été modifié on peut donc enregistrer nos données directement
+        User.update(req.body, {where: {id: req.params.id}})
+            .then(() => res.status(201).json({message: "profil actualisé"}))
+            .catch(error => res.status(400).json(error));
+    };
 };
 
 /* logique pour afficher tous les users */

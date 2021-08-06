@@ -4,7 +4,7 @@
     <div id="usersContainer">            
         <div :key="user.id" v-for="user in users" class="user">
             <div class="profileContainer">
-                <img :src="imgPath + user.profile" :alt="user.profile" class="profile">    
+                <img :src="user.profile" :alt="user.profile" class="profile">    
             </div>
             <div>
                 <p>{{user.firstname}} {{user.lastname}}</p>
@@ -25,14 +25,15 @@ export default {
     data() {
         return {
             users: [],
-            imgPath: "http://localhost:3000/images/"
         }
     },
     methods: {
         async fetchUsers() {
             const res = await fetch('http://localhost:3000/api/users/all')
-            const data = await res.json()
-            console.log(data)
+            const data = await res.json()            
+            data.forEach(user => {
+                user.profile = `http://localhost:3000/images/${user.profile}`
+            })
             return data
         }
     },
