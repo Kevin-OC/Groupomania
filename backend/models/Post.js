@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../config/database.js');
 const User = require('../models/User.js');
+const Comment = require('../models/Comment.js');
 
 /* schéma sequelize pour post */
 const Post = database.define('post', {
@@ -9,5 +10,16 @@ const Post = database.define('post', {
 });
 
 //Post.belongsTo(User);
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
 
+/*
+Post.associate = (models) => {
+    Post.hasMany(models.Comment, {
+        onDelete: "cascade",
+        foreignKey: 'postId',
+        as: 'postId'
+    });
+};
+*/
 module.exports = Post;

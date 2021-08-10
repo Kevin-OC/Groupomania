@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../config/database.js');
 const Post = require('../models/Post.js');
+const Comment = require('../models/Comment.js');
 
 /* schéma sequelize pour user */
 const User = database.define('user', {
@@ -12,17 +13,9 @@ const User = database.define('user', {
     isAdmin: {type: Sequelize.DataTypes.BOOLEAN, defaultValue: false}
 });
 
-User.hasMany(Post);
+User.hasMany(Post /*,{onDelete: 'CASCADE'}*/);
 Post.belongsTo(User);
-
-/*
-Ci-dessous une méthode alternative à hasMany/belongsTo: associate(models)
-Users.associate = (models) => {
-    Users.hasMany(models.Post, {
-        foreignKey: 'user_id',
-        as: 'creator'
-    });
-};
-*/
+User.hasMany(Comment);
+Comment.belongsTo(User);
 
 module.exports = User;

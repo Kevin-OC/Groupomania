@@ -1,13 +1,16 @@
 <template>
     <Nav redirection="/home" :logged="true" />
     <Header :home="true" header="Accueil" />
-    <router-link to="/new-post" class="btn">Créer un nouveau post</router-link>
-    <Posts :posts="posts" @deletePost-emit="deletePostFrontend" />
+    <button v-if="createPost" @click="toggleBtn" class="btn">Retour au posts</button>
+    <button v-else @click="toggleBtn" class="btn">Créer un nouveau message</button>       
+    <CreatePost v-show="createPost" @toggle-btn="toggleBtn" @add-Post="addPostFrontend" />
+    <Posts :posts="posts" @delete-Post="deletePostFrontend" />
 </template>
 
 <script>
 import Nav from "../components/Nav.vue"
 import Header from "../components/Header.vue"
+import CreatePost from "../components/CreatePost.vue"
 import Posts from "../components/Posts.vue"
 
 export default {
@@ -15,29 +18,37 @@ export default {
     components: {
         Nav,
         Header,
+        CreatePost,
         Posts
     },
     data() {
         return {
-            posts: []
+            posts: [],
+            postId: null,
+            createPost: false,
         }
     },
     methods: {
+        toggleBtn() {
+            this.createPost = !this.createPost
+        },
+        async addPostFrontend() {
+            this.posts = await this.fetchPosts()      
+        },
         deletePostFrontend(id) {
-            console.log("delete emit frontend")
             this.posts = this.posts.filter((post) => post.id !== id)
+        },
+        async fetchPosts() {
+            const resPosts = await fetch('http://localhost:3000/api/posts/all')
+            const dataPosts = await resPosts.json()
+            dataPosts.forEach(post => {
+                post.createdAt = post.createdAt.split('T')[0]
+            });
+            dataPosts.reverse()
+            return dataPosts
         }
     },
-    beforeCreate() {
-        fetch(`http://localhost:3000/api/posts/all`)
-            .then(res => res.json())
-            .then(data => {
-                data.reverse()
-                this.posts = data    
-            })
-            .catch(error => {error})
-    },
-    async create() {
+    async created() {
         this.posts = await this.fetchPosts()
     }
 }

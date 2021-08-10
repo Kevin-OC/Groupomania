@@ -1,10 +1,12 @@
 const database = require('../config/database.js');
 const Post = require('../models/Post.js');
+const User = require('../models/User.js');
+const fs = require('fs');
 
 /* logique pour afficher l'ensemble des posts */
 exports.getAllPosts = (req, res) => {
     try {
-        Post.findAll()
+        Post.findAll({ include: User })
             .then(posts => {
                 res.status(200).json(posts);
             })
@@ -16,8 +18,16 @@ exports.getAllPosts = (req, res) => {
 
 /* logique pour afficher un post (en fonction de son id) */
 exports.getOnePost = (req, res) => {
-    console.log("Post affiché")
-    res.status(200).json({message: 'Post affiché'});
+    try {
+        Post.findOne({where: {id:req.params.id}})
+            .then(post => {
+                console.log("Post trouvé:", post.id);
+                res.status(200).json(post);
+            })
+            .catch(error => res.status(400).json(error))
+    } catch {
+        error => res.status(500).json(error);
+    }
 };
 
 /* logique pour créer un post */
@@ -32,8 +42,8 @@ exports.createPost = (req, res) => {
         let { text, file, userId } = req.body;
         Post.create({text, file, userId})
             .then(newPost => {
-                console.log("nouveau post créé", newPost);
-                res.status(201);
+                console.log("nouveau post créé");
+                res.status(201).json(newPost);
             })
             .catch(error => res.status(400).json(error))
     } catch {
@@ -43,11 +53,25 @@ exports.createPost = (req, res) => {
 
 /* logique pour modifier un post */
 exports.editPost = (req, res) => {
+    req.file ? req.body.file = req.file.filename : console.log("on garde la même photo"); // <- on vérifie si l'user a uploadé une nouvelle photo
+    if (req.file) { // <- on supprime l'ancienne image du post
+        Post.findOne({where: {id:req.params.id}})
+            .then(post => {
+                if(post.file) { // <- si post.file n'est pas null on supprime le fichier existant
+                    fs.unlink(`images/${post.file}`, (error) => {
+                        if (error) throw err
+                    })    
+                } else {
+                    console.log("l'image à remplacer est NULL")
+                }
+            })
+            .catch(error => res.status(400).json(error));
+    }
     try {
         Post.update(req.body, {where: {id: req.params.id}})
-            .then(post => {
-                console.log("post modifié:", post)
-                res.status(201).json(post);
+            .then(() => {
+                let updatedPost = {...req.body}
+                res.status(201).json(updatedPost)
             })
             .catch(error => res.status(400).json(error))
     } catch {

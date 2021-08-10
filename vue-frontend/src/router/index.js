@@ -7,6 +7,11 @@ const routes = [
     redirect: '/login',
     name: 'Connection',
     component: Connection
+  },  
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/signup',
@@ -16,19 +21,9 @@ const routes = [
     component: () => import('../views/Signup.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
-  },
-  {
     path: '/home',
     name: 'Home',
     component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/new-post',
-    name: 'New-Post',
-    component: () => import('../views/New-Post.vue')
   },
   {
     path: '/modify-post/:id',
@@ -50,6 +45,12 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  let isAuthenticated = true
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  else next()
 })
 
 export default router

@@ -27,8 +27,8 @@ export default {
     methods: {
         logout() {
             // pour déconnecter l'user on appelle la méthode clear() pour effacer tous les items dans localStorage
-            localStorage.clear()
-            console.log("user déconnecté")          
+            localStorage.clear() 
+            console.log("user déconnecté")       
         }
     }
 }

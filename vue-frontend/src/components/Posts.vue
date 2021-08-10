@@ -3,14 +3,14 @@
         <div :key="post.id" v-for="post in posts" class="post">
             <div class="header">
                 <div class="profileContainer">
-                    <img :src="post.profile" alt="photo de profil" class="profile">    
+                    <img :src="'http://localhost:3000/images/' + post.user.profile" :alt="post.user.profile" class="profile">    
                 </div>
                 <div class="description">
                     <div>
-                        <h4>{{ post.creator }}</h4>
-                        <p>posté le {{ post.date }}</p>    
+                        <h4>{{ post.user.firstname }} {{ post.user.lastname }}</h4>
+                        <p>posté le {{ post.createdAt }}</p>
                     </div>                 
-                    <div class="optionsBtn">
+                    <div v-if="connectedUser == post.userId" class="optionsBtn">
                         <button @click="modifyPost(post.id)"><i class="far fa-edit modify"></i>modifier</button>
                         <button @click="deletePost(post.id)"><i class="far fa-trash-alt delete"></i>supprimer</button>    
                     </div>
@@ -18,40 +18,41 @@
             </div>
             <p class="text">{{ post.text }}</p>
             <div v-if="post.file" class="fileContainer">          
-                <img :src="post.file" :alt="post.file" class="file">
+                <img :src="'http://localhost:3000/images/' + post.file" :alt="post.file" class="file">
             </div>
             <p class="like"><i class="fas fa-thumbs-up likeCount"></i> {{ post.likes }}</p>
             <div class="interaction">
                 <button class="btn"><i class="far fa-thumbs-up likeBtn"></i> J'aime</button>
-                <button class="btn" @click="toggleComment(post.id)"><i class="far fa-comment"></i> Commentaires</button>
+                <button class="btn"><i class="far fa-comment"></i> Commentaires</button>
             </div>
-            <Comments :commentSection="showComment" :comments="comments" />   
-        </div>     
+            <Comments :comments="comments"/>
+        </div>
     </div>
     <div id="noPost" v-else>
         <p>Il n'y a pas encore de publications! Cliquez sur "créer un post" pour en faire une.</p>
-    </div>  
+    </div>
 </template>
 
 <script>
 import Comments from "../components/Comments.vue"
-//import router from '../router'
+import router from '../router'
 export default {
     name: 'Posts',
     components: {
         Comments
     },
     props: {
-        posts: Array        
+        posts: Array   
     },
     data() {
         return {
             comments: [],
-            showComment: false
+            connectedUser: localStorage.getItem('userId'),
         }
     },
     methods: {
         deletePost(id) {
+            console.log(id)
             if (confirm("êtes vous sûr de vouloir supprimer cette publication ?")) {
                     fetch(`http://localhost:3000/api/posts/${id}`, {
                         method: 'DELETE',
@@ -59,26 +60,27 @@ export default {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }                        
                     })
-                        .then(location.reload())
                         .catch(error => console.log(error))
+                this.$emit('delete-Post', id)
             }
-        },
-        /*async fetchComments() {
-            const res = await fetch('http://localhost:3000/api/comments')
-            const data = await res.json()
-            return data        
         },
         modifyPost(id) {
             router.push({ path: `/modify-post/${id}` })
         },
-        toggleComment(id) {
-            console.log(id)
-            this.showComment = !this.showComment;
+        /*
+        async fetchComments() {
+            const resComments = await fetch(`http://localhost:3000/api/comments/3/all`)
+            const dataComments = await resComments.json()
+            dataComments.reverse()
+            return dataComments
         }
+        */
     },
+    /*
     async created() {
-        this.comments = await this.fetchComments()*/
+        this.comments = await this.fetchComments()
     }
+    */
 }
 </script>
 
@@ -107,11 +109,11 @@ export default {
     padding-left: 16px;
 }
 .profileContainer {
-    width: 8%;
-    height: 8%;
+    margin: auto;
+    max-width: 96px;
+    max-height: 96px;
     min-width: 64px;
-    min-height: 64px;    
-    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
+    min-height: 64px;
     border-radius: 50%;
     overflow: hidden;
 }

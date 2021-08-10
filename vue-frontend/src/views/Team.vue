@@ -4,7 +4,7 @@
     <div id="usersContainer">            
         <div :key="user.id" v-for="user in users" class="user">
             <div class="profileContainer">
-                <img :src="user.profile" :alt="user.profile" class="profile">    
+                <img :src="'http://localhost:3000/images/' + user.profile" :alt="user.profile" class="profile">    
             </div>
             <div>
                 <p>{{user.firstname}} {{user.lastname}}</p>
@@ -30,10 +30,7 @@ export default {
     methods: {
         async fetchUsers() {
             const res = await fetch('http://localhost:3000/api/users/all')
-            const data = await res.json()            
-            data.forEach(user => {
-                user.profile = `http://localhost:3000/images/${user.profile}`
-            })
+            const data = await res.json()
             return data
         }
     },
@@ -62,8 +59,8 @@ export default {
     justify-content: space-around;
 }
 .profileContainer {
-    width: 8%;
-    height: 8%;
+    width: 128px;
+    height: 128px;
     min-width: 64px;
     min-height: 64px;    
     border-radius: 50%;

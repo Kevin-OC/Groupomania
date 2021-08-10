@@ -1,24 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const commentCtrl = require('../controllers/comment.js');
-//const auth = require('../middleware/auth.js'); // <- ajouter ce middleware à toutes les routes que l'on veut protéger (à placer avant les controllers)
 
 /* '/' = https://localhost:3000/api/comments */
 
-/* route création comment
-router.post('/', auth, commentCtrl.createcomment);
+/* route création commentaire */
+router.post('/:postId/create', commentCtrl.createComment);
 
-/* route modification comment
-router.put('/:id', auth, commentCtrl.editcomment);
+/* route affichage ensemble des commentaires */
+router.get('/:postId/all', commentCtrl.getAllComments);
 
-/* route affichage ensemble des comments
-router.get('/', auth, commentCtrl.getAllcomments);
+/* route affichage d'un commentaire en particulier */
+router.get('/:postId/:id', commentCtrl.getOneComment);
 
-/* route affichage comment connecté
-router.get('/:id', auth, commentCtrl.getOnecomment);
+/* route modification commentaire */
+router.put('/:postId/:id', commentCtrl.editComment);
 
-/* route suppression comment
-router.delete('/:id', auth, commentCtrl.deletecomment);*/
+/* route suppression commentaire */
+router.delete('/:postId/:id', commentCtrl.deleteComment);
 
 /* exports */
 module.exports = router;

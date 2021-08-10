@@ -76,8 +76,8 @@ export default {
 }
 .profileContainer {
     margin: auto;
-    width: 24%;
-    height: 24%;
+    width: 78px;
+    height: 78px;
     min-width: 64px;
     min-height: 64px;
     border-radius: 50%;

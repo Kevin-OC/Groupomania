@@ -1,48 +1,97 @@
 <template>
     <div id="modifyPost">
         <form @submit.prevent="modifyPost">
-            <div id="top">
-                <div id="profile">
-                    <img src="../assets/vuejs.png" alt="profile picture">
-                </div>
-                <div id="text">
-                    <textarea name="textarea" v-model="post.text"></textarea>
-                </div>    
-            </div>            
-            <div id="bottom">
-                <label for="file">ancien fichier: {{post.file}}</label>                
-                <input type="file" name="file" class="upload" id="file">          
-                <input type="submit" value="Je modifie !" class="btn">
+            <div id="btns">
+                <label for="file">Choisir une nouvelle image</label>
+                <input type="file" ref="file" name="file" class="upload" id="file" @change="updateFile">
+            </div>
+            <div id="fileContainer">
+                <img id="preview" :src="'http://localhost:3000/images/' + post.file" :alt="post.file" v-if="preview">
+                <p v-else>Ce post ne possède pas d'image</p>
+            </div>
+            <div id="text">
+                <label for="textarea">Changer votre texte</label>
+                <textarea name="textarea" v-model="post.text"></textarea>
+            </div>
+            <div id="modify">
+                <input type="submit" value="je modifie !" class="btn">    
             </div>
             <p>{{errMsg}}</p>
         </form>
-    </div>    
+    </div>
 </template>
 
 <script>
+import axios from 'axios';
+import router from '../router'
 export default {
     name: 'ModifyPost',
     beforeCreate() {
-        fetch('http://localhost:3000/api/posts')
-        .then(res => res.json())
-        .then(data => {
-            let currentPostId = this.$route.params.id - 1
-            this.post = data[currentPostId]
-            console.log(data)
+        const parsedUrl = new URL(window.location.href)
+        const postId = parsedUrl.pathname.split('/modify-post/')[1]
+        
+        fetch(`http://localhost:3000/api/posts/${postId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
-        .catch(error => {console.error(error)})
+            .then(res => res.json())
+            .then(data => {
+                data.file ? this.preview = true : this.preview = false
+                this.post = {...data}
+            })
+            .catch(error => {error})
     },
     data() {
         return {
-            post: "",
+            post: {},
+            newFile: '',
+            preview: null,
             errMsg: null
         }
     },
     methods: {
-        modifyPost() {
-            console.log('hello')
+        updateFile(event) {
+            /* sur le onchange on va attribuer cette valeur à file (nécessaire pour l'envoi au backend) */ 
+            this.newFile = this.$refs.file.files[0]
+            let input = event.target
+            if(input.files) {
+                let reader = new FileReader()
+                reader.onload = (e) => {
+                    document.getElementById('preview').src = e.target.result
+                }
+                reader.readAsDataURL(input.files[0])
+                this.preview = true
+            }
+        },
+        async modifyPost() {
+            /* on peut envoyer un post sans image mais il faut au moins qu'il y est un texte */     
+            if (!this.post.text) {
+                this.errMsg = "Error => vous devez remplir le champ <message> pour créer une nouvelle publication!"
+                return
+            }
+            /* on créé un objet formData afin de pouvoir ajouter le texte et surtout le file choisi */
+            let formData = new FormData()
+            formData.append('text', this.post.text)
+            if (this.newFile) {
+                formData.append('file', this.newFile)
+            }
+            formData.append('userId', localStorage.getItem('userId'))
+            /* envoi du form via axios.put de l'objet formData */
+            if (confirm("êtes vous sûr de vouloir modifier votre post ?")) {
+                axios.put(`http://localhost:3000/api/posts/${this.post.id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                })  
+                    .then(res => {
+                        console.log(res.data)
+                        router.push({ path: '/home' })                                               
+                    })
+                    .catch(error => console.log(error))
+            }            
         }
-    }    
+    }
 }
 </script>
 
@@ -59,39 +108,38 @@ form {
     display: flex;
     flex-direction: column;
 }
-#top {
-    display: flex;
-    align-items: center;
-}
-#profile {
-    width: 10%;
-    height: 10%;
-    min-width: 64px;
-    min-height: 64px;    
-    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
-    border-radius: 50%;
+#fileContainer {
     overflow: hidden;
+    margin: 1rem 0 1rem 0;
 }
 img {
     height: 100%;
     width: 100%;
     object-fit: cover;
 }
+#btns {
+    display: flex;
+    flex-direction: column;
+}
+#file {
+    cursor: pointer;
+}
 #text {
-    width: 100%;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin: 1rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
 }
 textarea {
-    width: 100%;
-    height: 6rem;
-    padding: 8px;
+    padding: 16px;
 }
-#bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid hsla(0, 0%, 0%, 0.5);
-    padding-top: 2rem;
+#modify {
+    text-align: right;
 }
 .btn {
     background-color: #1c68e6;
@@ -101,11 +149,7 @@ textarea {
     border-radius: 8px;
     height: 40px;
     color: white;
+    margin: 1rem 0 1rem 0;
 }
-.upload:active {
-  transform: scale(0.98);
-}
-p {
-    margin-top: 1.6rem;
-}
+
 </style>

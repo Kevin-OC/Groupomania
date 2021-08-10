@@ -10,7 +10,7 @@
                     Changer d'image de profil :
                 </div>
                 <div class="profileContainer">
-                    <img :src="user.profile" :alt="user.profile" class="profile">   
+                    <img id="preview" :src="user.profile" :alt="user.profile" class="profile">   
                 </div>                
             </label>
             <input type="file" ref="file" name="file" id="file" @change="selectFile">           
@@ -70,8 +70,16 @@ export default {
                     .catch(error => {error})
             }
         },
-        selectFile() {
+        selectFile(event) {
             this.file = this.$refs.file.files[0]
+            let input = event.target
+            if(input.files) {
+                let reader = new FileReader()
+                reader.onload = (e) => {
+                    document.getElementById('preview').src = e.target.result
+                }
+                reader.readAsDataURL(input.files[0])
+            }
         },
         modifyProfile() {            
             let formData = new FormData()

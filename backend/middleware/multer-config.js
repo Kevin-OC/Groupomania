@@ -5,7 +5,8 @@ const multer = require('multer');
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/png': 'png'
+    'image/png': 'png',
+    'image/svg+xml': 'svg'
 };
 
 /* la méthode 'diskStorage()' demande: un dossier de destination, et un nom de fichier */

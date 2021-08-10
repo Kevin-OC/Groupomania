@@ -53,9 +53,13 @@ exports.editUser = (req, res) => {
     if (req.file) { // <- on supprime l'ancienne image de profil
         User.findOne({where: {id:req.params.id}})
             .then(user => {
-                fs.unlink(`images/${user.profile}`, (error) => {
-                    if (error) throw err
-                })
+                if(user.profile !== "defaultUserProfile.png") { // <- si sa photo de profile n'est pas celle par défaut on peut la supprimer
+                    fs.unlink(`images/${user.profile}`, (error) => {
+                        if (error) throw err
+                    })    
+                } else {
+                    console.log("ce fichier ne peut être effacé car c'est l'image par défaut")
+                }
             })
             .catch(error => res.status(400).json(error));
     }
@@ -95,7 +99,6 @@ exports.getOneUser = (req, res) => {
     try {
         User.findOne({where: {id:req.params.id}})
             .then(user => {
-                console.log("User trouvé:", user.firstname, user.lastname);
                 res.status(200).json(user);
             })
             .catch(error => res.status(400).json(error))
