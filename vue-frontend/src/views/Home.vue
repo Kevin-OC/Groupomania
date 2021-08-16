@@ -4,7 +4,7 @@
     <button v-if="createPost" @click="toggleBtn" class="btn">Retour au posts</button>
     <button v-else @click="toggleBtn" class="btn">Créer un nouveau message</button>       
     <CreatePost v-show="createPost" @toggle-btn="toggleBtn" @add-Post="addPostFrontend" />
-    <Posts :posts="posts" @delete-Post="deletePostFrontend" />
+    <Posts :posts="posts" @delete-Post="deletePostFrontend" :isAdmin="isAdmin" :userId="userId" />
 </template>
 
 <script>
@@ -12,7 +12,6 @@ import Nav from "../components/Nav.vue"
 import Header from "../components/Header.vue"
 import CreatePost from "../components/CreatePost.vue"
 import Posts from "../components/Posts.vue"
-
 export default {
     name: "Home",
     components: {
@@ -24,8 +23,9 @@ export default {
     data() {
         return {
             posts: [],
-            postId: null,
             createPost: false,
+            isAdmin: null,
+            userId: null
         }
     },
     methods: {
@@ -33,7 +33,7 @@ export default {
             this.createPost = !this.createPost
         },
         async addPostFrontend() {
-            this.posts = await this.fetchPosts()      
+            this.posts = await this.fetchPosts()    
         },
         deletePostFrontend(id) {
             this.posts = this.posts.filter((post) => post.id !== id)
@@ -50,6 +50,8 @@ export default {
     },
     async created() {
         this.posts = await this.fetchPosts()
+        this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
+        this.userId = Number(localStorage.getItem('userId'))
     }
 }
 </script>

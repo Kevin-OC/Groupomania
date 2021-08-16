@@ -91,8 +91,7 @@ export default {
             }
             if (this.file) {
                 formData.append('file', this.file)
-            }
-            
+            }            
             /*
             // nos regex
             const regexName = /^[a-zéèçàêïü]{2,50}(-| )?([a-zéèçà]{2,50})?$/gmi;
@@ -111,7 +110,6 @@ export default {
                 this.errMsg = "Password Err! => entre 8 et 32 caractères + 1 minuscule min + 1 maj min + 1 caractère spécial"
                 return
             }*/
-
             if (confirm("êtes vous sûr de vouloir modifier votre profil ?")) {
                 axios.put(`http://localhost:3000/api/users/${localStorage.getItem('userId')}`, formData, {
                     headers: {

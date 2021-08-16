@@ -35,11 +35,10 @@ exports.login = (req, res) => {
                         return res.status(401).json({ error: 'Mot de passe incorrect !'});   
                     };
                     res.status(200).json({
+                        // la res de login renvoi des données de user et le token (qui servira pour l'authentification)
                         userId: user.id,
-                        token: jwt.sign(
-                            { userId: user.id, isAdmin: false },
-                            'token_dev', // <- notre TOKEN provisoire (à remplacer par process.env.TOKEN ensuite)
-                            { expiresIn: '24h' })
+                        isAdmin: user.isAdmin, 
+                        token: jwt.sign({userId: user.id, isAdmin: user.isAdmin }, 'token_dev', { expiresIn: '24h' })
                     });               
                 })
                 .catch(error => res.status(400).json(error));
@@ -48,7 +47,7 @@ exports.login = (req, res) => {
 }
 
 /* logique pour update un user */
-exports.editUser = (req, res) => {    
+exports.editUser = (req, res) => {  
     req.file ? req.body.profile = req.file.filename : console.log("on garde la même photo"); // <- on vérifie si l'user a uploadé une nouvelle photo
     if (req.file) { // <- on supprime l'ancienne image de profil
         User.findOne({where: {id:req.params.id}})

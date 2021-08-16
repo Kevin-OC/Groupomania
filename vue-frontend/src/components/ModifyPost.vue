@@ -76,7 +76,6 @@ export default {
             if (this.newFile) {
                 formData.append('file', this.newFile)
             }
-            formData.append('userId', localStorage.getItem('userId'))
             /* envoi du form via axios.put de l'objet formData */
             if (confirm("êtes vous sûr de vouloir modifier votre post ?")) {
                 axios.put(`http://localhost:3000/api/posts/${this.post.id}`, formData, {

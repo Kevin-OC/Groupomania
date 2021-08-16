@@ -82,7 +82,6 @@ exports.editPost = (req, res) => {
 /* logique pour supprimer un post */
 exports.deletePost = (req, res) => {
     try {
-        console.log(req.params.id);
         Post.destroy({where: {id:req.params.id}})
             .then(post => {
                 console.log("Post supprimé");

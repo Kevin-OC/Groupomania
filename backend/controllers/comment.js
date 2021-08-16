@@ -1,12 +1,12 @@
 const database = require('../config/database.js');
 const Comment = require('../models/Comment.js');
+const User = require('../models/User.js');
 
 /* logique pour afficher l'ensemble des commentaires d'un post */
 exports.getAllComments = (req, res) => {
     try {
-        Comment.findAll()
+        Comment.findAll({where: {postId: req.params.postId}, include: User})
             .then(comments => {
-                console.log("postId:", req.params.postId)
                 res.status(200).json(comments);
             })
             .catch(error => res.status(400).json(error))
@@ -20,7 +20,7 @@ exports.createComment = (req, res) => {
     try {
         console.log(req.body);
         let { text, userId, postId } = req.body;
-        Post.create({text, postId, userId})
+        Comment.create({text, postId, userId})
             .then(newComment => {
                 console.log("nouveau commentaire créé");
                 res.status(201).json(newComment);
@@ -34,9 +34,9 @@ exports.createComment = (req, res) => {
 /* logique pour afficher un commentaire (en fonction de son id) */
 exports.getOneComment = (req, res) => {
     try {
-        Post.findOne({where: {id:req.params.id}})
+        Comment.findOne({where: {id:req.params.id}, include: User})
             .then(comment => {
-                console.log("Commentaire trouvé:", comment.id);
+                console.log("Commentaire trouvé:", comment);
                 res.status(200).json(comment);
             })
             .catch(error => res.status(400).json(error))
@@ -48,11 +48,10 @@ exports.getOneComment = (req, res) => {
 /* logique pour supprimer un commentaire */
 exports.deleteComment = (req, res) => {
     try {
-        console.log(req.params.id);
         Comment.destroy({where: {id:req.params.id}})
-            .then(comment => {
+            .then(() => {
                 console.log("Commentaire supprimé");
-                res.status(200).json(comment);
+                res.status(200);
             })
             .catch(error => res.status(400).json(error))
     } catch {
@@ -62,6 +61,7 @@ exports.deleteComment = (req, res) => {
 
 /* logique pour modifier un commentaire */
 exports.editComment = (req, res) => {
+    console.log(req.body)
     try {
         Comment.update(req.body, {where: {id: req.params.id}})
             .then(() => {

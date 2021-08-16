@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import store from '../store/index.js'
 import Nav from '../components/Nav.vue'
 import router from '../router'
 export default {
@@ -51,11 +52,17 @@ export default {
             })
                 .then(res => {
                     const localData = res
+                    store.state.isLogged = true
                     localData.json().then(data => {
                         localStorage.setItem('token', data.token)
                         localStorage.setItem('userId', data.userId)
-                    })                    
-                    res.status === 200 ? router.push({ path: 'home' }) : this.errMsg = "Email ou mot de passe incorrect"
+                        localStorage.setItem('isAdmin', data.isAdmin)
+                    })
+                    if (res.status === 200 ) {
+                        router.push({ path: 'home' })
+                    }  else {
+                        this.errMsg = "Email ou mot de passe incorrect"
+                    }             
                 })                
                 .catch(error => {console.error(error)})
         }

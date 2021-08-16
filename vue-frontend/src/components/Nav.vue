@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import store from '../store/index.js'
+import router from '../router'
 export default {
     name: 'Nav',
     props: {
@@ -26,9 +28,11 @@ export default {
     },
     methods: {
         logout() {
+            store.state.isLogged = false
+            router.push({ path: 'login' }) 
             // pour déconnecter l'user on appelle la méthode clear() pour effacer tous les items dans localStorage
             localStorage.clear() 
-            console.log("user déconnecté")       
+            console.log("user déconnecté")
         }
     }
 }

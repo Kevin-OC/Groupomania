@@ -20,6 +20,7 @@ try {
 }
 /* Création des tables MySQL si elles n'existent pas */
 //sequelize.sync({ force: true });
+//sequelize.sync({ alter: true })
 
 /* middleware général pour établir les autorisations (*, CORS, METHODS) */
 app.use((req, res, next) => {

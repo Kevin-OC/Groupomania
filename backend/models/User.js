@@ -5,7 +5,7 @@ const Comment = require('../models/Comment.js');
 
 /* schéma sequelize pour user */
 const User = database.define('user', {
-    email: {type: Sequelize.DataTypes.STRING}, // <- Unique = true ? package ?
+    email: {type: Sequelize.DataTypes.STRING},
     firstname: {type: Sequelize.DataTypes.STRING},
     lastname: {type: Sequelize.DataTypes.STRING},
     password: {type: Sequelize.DataTypes.STRING},
@@ -13,9 +13,18 @@ const User = database.define('user', {
     isAdmin: {type: Sequelize.DataTypes.BOOLEAN, defaultValue: false}
 });
 
-User.hasMany(Post /*,{onDelete: 'CASCADE'}*/);
+/* associations */
+User.hasMany(Post);
 Post.belongsTo(User);
 User.hasMany(Comment);
 Comment.belongsTo(User);
+
+/*
+User.hasMany(Post, {
+    onDelete: 'cascade',
+    foreignKey: { allowNull: false },
+    hooks: true
+});
+*/
 
 module.exports = User;

@@ -64,6 +64,7 @@ export default {
             this.$emit('toggle-Btn')
             this.text = ''
             this.file = ''
+            this.preview = ''
         }
     }
 }

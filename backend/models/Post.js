@@ -9,11 +9,12 @@ const Post = database.define('post', {
     file: {type: Sequelize.STRING}
 });
 
-//Post.belongsTo(User);
+/* associations */
 Post.hasMany(Comment);
 Comment.belongsTo(Post);
 
 /*
+//Post.belongsTo(User);
 Post.associate = (models) => {
     Post.hasMany(models.Comment, {
         onDelete: "cascade",
@@ -23,3 +24,4 @@ Post.associate = (models) => {
 };
 */
 module.exports = Post;
+

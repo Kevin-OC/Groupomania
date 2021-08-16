@@ -17,6 +17,7 @@
 <script>
 import Nav from '../components/Nav.vue'
 import router from '../router'
+import store from '../store/index.js'
 export default {
     name: 'Signup',
     components: {
@@ -87,11 +88,17 @@ export default {
                     })
                         .then(res => {
                             const localData = res
+                            store.state.isLogged = true
                             localData.json().then(data => {
                                 localStorage.setItem('token', data.token)
                                 localStorage.setItem('userId', data.userId)
+                                localStorage.setItem('isAdmin', data.isAdmin)
                             })                    
-                            res.status === 200 ? router.push({ path: 'home' }) : this.errMsg = "Email ou mot de passe incorrect"
+                            if (res.status === 200 ) {
+                                router.push({ path: 'home' })
+                            }  else {
+                                this.errMsg = "Email ou mot de passe incorrect"
+                            }
                         })
                         .catch(error => {console.error(error)})
                 })

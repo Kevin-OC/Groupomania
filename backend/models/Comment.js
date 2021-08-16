@@ -8,8 +8,8 @@ const Comment = database.define('comment', {
     text: {type: Sequelize.STRING}
 });
 
+module.exports = Comment;
+
 //User.hasMany(Comment);
 //Comment.belongsTo(User);
 //Comment.belongsTo(Post);
-
-module.exports = Comment;
