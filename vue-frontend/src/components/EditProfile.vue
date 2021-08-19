@@ -56,6 +56,7 @@ export default {
         }
     },
     methods: {
+        /* fonction pour supprimer le compte */
         deleteProfile() {
             if (confirm("êtes vous sûr de vouloir supprimer votre compte ?")) {
                 fetch(`http://localhost:3000/api/users/${localStorage.getItem('userId')}`, {
@@ -70,17 +71,20 @@ export default {
                     .catch(error => {error})
             }
         },
+        /* avant d'envoyer le nouveau fichier on récupère les données */
         selectFile(event) {
             this.file = this.$refs.file.files[0]
             let input = event.target
+            /* pour obtenir une prévisualisation du fichier */
             if(input.files) {
-                let reader = new FileReader()
+                let reader = new FileReader() 
                 reader.onload = (e) => {
                     document.getElementById('preview').src = e.target.result
                 }
                 reader.readAsDataURL(input.files[0])
             }
         },
+        /* fonction modification du compte user */
         modifyProfile() {            
             let formData = new FormData()
             formData.append('firstname', this.updateUser.firstname)
@@ -93,11 +97,11 @@ export default {
                 formData.append('file', this.file)
             }            
             /*
-            // nos regex
+            / nos regex
             const regexName = /^[a-zéèçàêïü]{2,50}(-| )?([a-zéèçà]{2,50})?$/gmi;
             const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
             const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
-            // nos véfifications
+            /* nos véfifications
             if (!(regexName.test(this.updateUser.firstname && this.updateUser.lastname))) {
                 this.errMsg = "Name Err! => format nom et/ou prénom incorrect";
                 return

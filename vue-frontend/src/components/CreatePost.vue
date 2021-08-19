@@ -60,8 +60,8 @@ export default {
             })  
                 .then(res => this.$emit('add-Post', res.data))
                 .catch(error => console.log(error))
-            /* on emit le toggle-Btn pour cacher ce composant tout en effaçant les inputs */
-            this.$emit('toggle-Btn')
+            /* on emit le toggle-Create pour cacher ce composant tout en effaçant les inputs */
+            this.$emit('toggle-Create')
             this.text = ''
             this.file = ''
             this.preview = ''

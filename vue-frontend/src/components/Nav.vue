@@ -1,18 +1,20 @@
 <template>
-    <div id="nav">
+    <div id="nav">        
         <div id="logo">
             <router-link :to="redirection">
                 <img src="../assets/logos/icon-left-font.svg" alt="logo">
             </router-link>
         </div>
+        <!-- l'user n'est pas connecté -> signup/login -->
         <div id="routes" v-if="!logged">
             <router-link to="/signup" class="link">Sign up</router-link>
             <router-link to="/login" class="link">Login</router-link>    
         </div>  
+        <!-- l'user est connecté et dans ce cas -> team/profile/logout -->
         <div id="options" v-else>
-            <router-link to="/team" class="link"><i class="fas fa-users"></i> Membres</router-link>
-            <router-link to="/profile" class="link"><i class="fas fa-user"></i> Profil</router-link>
-            <router-link to="/" @click="logout" class="link"><i class="fas fa-sign-out-alt"></i> Déconnexion</router-link>
+            <router-link to="/team" class="link"><i class="fas fa-users"></i>Membres</router-link>
+            <router-link to="/profile" class="link"><i class="fas fa-user"></i>Profil</router-link>
+            <router-link to="/" @click="logout" class="link"><i class="fas fa-sign-out-alt"></i>Déconnexion</router-link>
         </div>    
     </div>
 </template>
@@ -27,10 +29,12 @@ export default {
         logged: Boolean,
     },
     methods: {
+        /* déconnexion de l'user */
         logout() {
             store.state.isLogged = false
+            /* maintenant que isLogged (dans le store) est false on va renvoyer le user vers la page /login */
             router.push({ path: 'login' }) 
-            // pour déconnecter l'user on appelle la méthode clear() pour effacer tous les items dans localStorage
+            /* pour déconnecter l'user on appelle la méthode clear() pour effacer tous les items dans localStorage */
             localStorage.clear() 
             console.log("user déconnecté")
         }
@@ -63,5 +67,8 @@ img {
 .link:hover{
     color: black;
     box-sizing: content-box;
+}
+i {
+    margin-right: 2px;
 }
 </style>

@@ -1,7 +1,7 @@
 /* imports généraux */
 const express = require('express');
 const mysql = require('mysql2');
-const database = require('./config/database.js');
+const { sequelize } = require('./models/index.js');
 const path = require('path');
 /* imports routes */
 const usersRoutes = require('./routes/users.js');

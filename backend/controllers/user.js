@@ -1,4 +1,6 @@
-const User = require('../models/User.js');
+const { User } = require('../models/index.js');
+const { Post } = require('../models/index.js');
+const { Like } = require('../models/index.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -83,7 +85,7 @@ exports.editUser = (req, res) => {
 /* logique pour afficher tous les users */
 exports.getAllUsers = (req, res) => {
     try {
-        User.findAll()
+        User.findAll({ include: { model: Post, include: { model: Like } }})
             .then(users => {
                 res.status(200).json(users);
             })

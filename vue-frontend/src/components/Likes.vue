@@ -1,11 +1,11 @@
 <template>
     <button v-if="!liked" @click="likePost(postId)" class="btn">
         <i class="far fa-thumbs-up likeBtn like"></i>
-        Like {{likes.length}}
+        {{likes.length}}
     </button>
     <button v-else @click="unlikePost(postId)" class="btn">
         <i class="far fa-thumbs-up likeBtn liked"></i>
-        Unlike {{likes.length}}
+        {{likes.length}}
     </button>
 </template>
 
@@ -22,15 +22,17 @@ export default {
             liked: null   
         }
     },
-    methods: {      
+    methods: {
+        /* fetch des Likes en fonction de l'id du post concerné */      
         async fetchLikes(postId) {
             const resLikes = await fetch(`http://localhost:3000/api/posts/${JSON.stringify(postId)}/likes`)
             const dataLikes = await resLikes.json()
             dataLikes.forEach(like => {
-            like.userId == this.userId ? this.liked = true : this.like = false
+            like.userId == this.userId ? this.liked = true : this.like = false // <- ici on vérifie si notre user à déjà liker ce post
         })
             return dataLikes
         },
+        /* fonction qui like le post (selon son id) */
         likePost(postId) {
             const data = {
                 like: true,
@@ -47,8 +49,9 @@ export default {
                 .then(res => res.json())
                 .then(data => this.likes.push(data))
                 .catch(error => console.log(error))
-            this.liked = true
+            this.liked = true // <- on indiquer à notre template que le user à liker ce post
         },
+        /* fonction pour unliker le post */
         unlikePost(postId) {
             const data = {
                 userId: this.userId
@@ -60,7 +63,7 @@ export default {
                 },
                 body: JSON.stringify(data)
             })
-            this.likes = this.likes.filter((like) => like.userId != this.userId)
+            this.likes = this.likes.filter((like) => like.userId != this.userId) // <- pour unliker le post côté front
             this.liked = false
         }
     },

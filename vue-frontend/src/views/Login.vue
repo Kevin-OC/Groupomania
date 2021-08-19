@@ -32,16 +32,16 @@ export default {
     },
     methods: {
         onSubmit() {
-            // assigne les valeurs du form à l'objet data
+            /* assigne les valeurs du form à l'objet data */
             const data = {
                 ...this.dataForm
             }      
-            // vérifie si tous les champs sont bien remplis
+            /* vérifie si tous les champs sont bien remplis */
             if (!data.email || !data.password) {
                 this.errMsg = "Err! Remplissez tous les champs du formulaire"
                 return
             }
-            // méthode POST pour l'envoi de body
+            /* méthode POST pour l'envoi de body */
             fetch('http://localhost:3000/api/users/login', {
                 method: 'POST',
                 mode: 'cors',
@@ -52,12 +52,14 @@ export default {
             })
                 .then(res => {
                     const localData = res
-                    store.state.isLogged = true
+                    store.state.isLogged = true // <- on envoi le booléan true afin d'ouvrir l'intercepteur de navigation
                     localData.json().then(data => {
+                        /* on récupère dans localStorage les valeurs générés par le token */
                         localStorage.setItem('token', data.token)
                         localStorage.setItem('userId', data.userId)
                         localStorage.setItem('isAdmin', data.isAdmin)
                     })
+                    /* si la réponse est 200 alors on entre */
                     if (res.status === 200 ) {
                         router.push({ path: 'home' })
                     }  else {

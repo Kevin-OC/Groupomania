@@ -22,9 +22,13 @@ router.put('/:id', auth, multer, postCtrl.editPost);
 /* route suppression post */
 router.delete('/:id', auth, postCtrl.deletePost);
 
-/* routes likes d'un post */
+/* route pour like un post */
 router.post('/:postId/like', likesCtrl.likePost);
+
+/* route unliker un post */
 router.delete('/:postId/unlike', likesCtrl.unlikePost);
+
+/* route pour récupérer les likes d'un post */
 router.get('/:postId/likes', likesCtrl.getAllLikesPost);
 
 /* exports */

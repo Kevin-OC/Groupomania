@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Post = require('../models/Post.js');
+const { Post } = require('../models/index.js');
 
 module.exports = (req, res, next) => {
     try {

@@ -3,13 +3,18 @@
     <Header :home="false" header="Membres" />
     <div id="usersContainer">            
         <div :key="user.id" v-for="user in users" class="user">
-            <div class="profileContainer">
-                <img :src="'http://localhost:3000/images/' + user.profile" :alt="user.profile" class="profile">    
-            </div>
-            <div>
-                <p>{{user.firstname}} {{user.lastname}}</p>
-            </div>            
-        </div>    
+            <div id="header">
+                <div class="profileContainer">
+                    <img :src="'http://localhost:3000/images/' + user.profile" :alt="user.profile" class="profile">    
+                </div>
+                <h4>{{user.firstname}} {{user.lastname}}</h4>   
+            </div>             
+            <div>                
+                <p>Nombre de post(s): #{{user.Posts.length}}</p>
+                <p>Nombres total de likes reçus: #{{getLikes(user.Posts)}}</p>
+                <p>Dernier post le: {{getDate(user.Posts)}}</p>                    
+            </div>           
+        </div>            
     </div>    
 </template>
 
@@ -25,13 +30,33 @@ export default {
     data() {
         return {
             users: [],
+            showPosts: null
         }
     },
     methods: {
+        /* on récupère les users */
         async fetchUsers() {
             const res = await fetch('http://localhost:3000/api/users/all')
             const data = await res.json()
+            console.log(data)
             return data
+        },
+        /* le compteur des likes reçus par l'user */
+        getLikes(userPosts) {
+            let totalLikes = 0
+            userPosts.forEach(post => {
+                totalLikes += post.Likes.length
+            })
+            return totalLikes
+        },
+        /* la date de son post le plus récent */
+        getDate(userPosts) {
+            if (userPosts < 1) {
+                return "ce user n'a pas encore posté"
+            } else {
+                return userPosts[userPosts.length -1].createdAt.split('T')[0]   
+            }
+            
         }
     },
     async created() {
@@ -42,25 +67,24 @@ export default {
 
 <style scoped>
 #usersContainer {
-    width: 40%;
+    max-width: 400px;
     margin: auto;
     border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
 }
 .user {
     box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
     margin: 1rem;
     padding: 1rem;
     border-radius: 4px;
+}
+#header {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 .profileContainer {
-    width: 128px;
-    height: 128px;
+    width: 96px;
+    height: 96px;
     min-width: 64px;
     min-height: 64px;    
     border-radius: 50%;
@@ -70,5 +94,8 @@ export default {
     height: 100%;
     width: 100%;
     object-fit: cover;
+}
+p {
+    margin: 0.5rem;
 }
 </style>

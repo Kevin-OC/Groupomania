@@ -1,6 +1,5 @@
-const database = require('../config/database.js');
-const Post = require('../models/Post.js');
-const User = require('../models/User.js');
+const { Post } = require('../models/index.js');
+const { User } = require('../models/index.js');
 const fs = require('fs');
 
 /* logique pour afficher l'ensemble des posts */

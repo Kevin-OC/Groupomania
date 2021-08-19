@@ -1,25 +1,28 @@
 <template>
+    <!-- pour créer un nouveau commentaire -->
     <form @submit.prevent="createComment" v-show="!editComment">
         <input name="comment" placeholder="Publiez un commentaire" v-model="newComment" class="text">                           
         <input type="submit" value="Je commente!" class="btn" >
     </form>
     <p>{{errMsg}}</p>
+    <!-- pour montrer la section commentaire (s'il y en a) -->
     <div id="commentsContainer" v-show="comments.length > 0 ">
         <div :key="comment.id" v-for="comment in comments" class="comment">
             <div class="header">
                 <div class="profileContainer">
-                        <img :src="'http://localhost:3000/images/' + comment.user.profile" :alt="comment.user.profile" class="profile">>    
+                        <img :src="'http://localhost:3000/images/' + comment.User.profile" :alt="comment.User.profile" class="profile">>    
                 </div>
                 <div class="commentUsername">
-                    <h5>{{comment.user.firstname}} {{comment.user.lastname}}</h5>     
+                    <h5>{{comment.User.firstname}} {{comment.User.lastname}}</h5>     
                 </div>
-                <div v-if="auth(comment.user.id)" class="optionsBtn">
+                <div v-if="auth(comment.User.id)" class="optionsBtn">
                     <button v-if="editComment != comment.id" @click="toggleComment(comment.id)"><i class="far fa-edit modify"></i>modifier</button>
                     <button v-if="editComment == comment.id" @click="toggleComment(comment.id)"><i class="fas fa-arrow-left"></i>annuler</button>
                     <button @click="deleteComment(comment.id)"><i class="far fa-trash-alt delete"></i>supprimer</button>    
                 </div>               
             </div>                       
             <p v-show="!editComment" class="commentText">{{comment.text}}</p>
+            <!-- pour modifier le commentaire -->
             <form v-if="editComment == comment.id" @submit.prevent="modifyComment(comment.id, comment.text)">
                 <input name="updateComment" v-model="comment.text" class="text">                           
                 <input type="submit" value="Je modifie!" class="btn">
@@ -46,6 +49,7 @@ export default {
         }
     },
     methods: {
+        /* fonction pour créer un nouveau commentaire */
         createComment() {
             if (!this.newComment) {
                 this.errMsg = "Erreur => vous devez remplir le champ <commentaire> pour créer un nouveau commentaire!"
@@ -69,6 +73,7 @@ export default {
                 .catch(error => {console.error(error)})
             this.newComment = ''
         },
+        /* on vérifie le statut de l'user connecté */
         auth(commentUserId) {
             if (this.isAdmin) {
                 return true
@@ -78,12 +83,14 @@ export default {
             }
             return true              
         },
+        /* pour afficher/cacher la section commentaire de ce post */
         toggleComment(commentId) {
             if (this.editComment == commentId) {
                 commentId = null
             }
             this.editComment = commentId
         },
+        /* pour supprimer le commentaire */
         deleteComment(commentId) {
             if (confirm("êtes vous sûr de vouloir supprimer ce commentaire ?")) {
                 fetch(`http://localhost:3000/api/comments/${JSON.stringify(commentId)}`, {
@@ -96,11 +103,11 @@ export default {
                 this.$emit('deleted', commentId)
             }   
         },
+        /* pour modifier le commentaire */ 
         modifyComment(commentId, commentText) {
             const data = {
                 text: commentText
             }
-            console.log(data.text)
             fetch(`http://localhost:3000/api/comments/${JSON.stringify(commentId)}`, {
                 method: 'PUT',
                 headers: {
@@ -113,6 +120,7 @@ export default {
             this.toggleComment(commentId)
         }
     },
+    /* on indique les emitters (ici l'ajout et la suppression) */
     emits: ['created', 'deleted']
 }
 </script>

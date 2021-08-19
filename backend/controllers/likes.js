@@ -1,6 +1,5 @@
-const database = require('../config/database.js');
-const Like = require('../models/Like.js');
-const User = require('../models/User.js');
+const { Like } = require('../models/index.js');
+const { User } = require('../models/index.js');
 
 /* logique pour liker un post */
 exports.likePost = (req, res) => {

@@ -31,6 +31,7 @@ export default {
         Edit
     },
     beforeCreate() {
+        /* on récupère le profil de l'user avant la création de la page */
         fetch(`http://localhost:3000/api/users/${localStorage.getItem('userId')}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -52,6 +53,7 @@ export default {
         }
     },
     methods: {
+        /* fonction pour switcher entre afficher/modifier profil */
         toggleProfile() {
             this.showProfile = !this.showProfile
             this.editProfile = !this.editProfile

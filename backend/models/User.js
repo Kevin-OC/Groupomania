@@ -1,30 +1,39 @@
-const Sequelize = require('sequelize');
-const database = require('../config/database.js');
-const Post = require('../models/Post.js');
-const Comment = require('../models/Comment.js');
-
-/* schéma sequelize pour user */
-const User = database.define('user', {
-    email: {type: Sequelize.DataTypes.STRING},
-    firstname: {type: Sequelize.DataTypes.STRING},
-    lastname: {type: Sequelize.DataTypes.STRING},
-    password: {type: Sequelize.DataTypes.STRING},
-    profile: {type: Sequelize.DataTypes.STRING, defaultValue: 'defaultUserProfile.png'},
-    isAdmin: {type: Sequelize.DataTypes.BOOLEAN, defaultValue: false}
-});
-
-/* associations */
-User.hasMany(Post);
-Post.belongsTo(User);
-User.hasMany(Comment);
-Comment.belongsTo(User);
-
-/*
-User.hasMany(Post, {
-    onDelete: 'cascade',
-    foreignKey: { allowNull: false },
-    hooks: true
-});
-*/
-
-module.exports = User;
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+	class User extends Model {
+		/**
+		 * Helper method for defining associations.
+		 * This method is not a part of Sequelize lifecycle.
+		 * The `models/index` file will call this method automatically.
+		 */
+		static associate(models) {
+			/* toutes nos associations avec onDelete: 'cascade' + la foreignKey */
+			User.hasMany(models.Post, {
+				onDelete: 'cascade',
+				foreignKey: { name: 'userId', allowNull: false },
+				hooks: true });
+			User.hasMany(models.Comment, {
+				onDelete: 'cascade',
+				foreignKey: { name: 'userId', allowNull: false },
+				hooks: true });
+			User.hasMany(models.Like, {
+				onDelete: 'cascade',
+				foreignKey: { name: 'userId', allowNull: false },
+				hooks: true });
+		}
+	};
+	User.init({
+		/* User a un email, prénom, nom, password, photo de profile et un statut admin ou pas */
+		email: DataTypes.STRING,
+		firstname: DataTypes.STRING,
+		lastname: DataTypes.STRING,
+		password: DataTypes.STRING,
+		profile: { type: DataTypes.STRING, defaultValue: 'defaultUserProfile.png' },
+		isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false }
+	}, {
+		sequelize,
+		modelName: 'User',
+	});
+	return User;
+};

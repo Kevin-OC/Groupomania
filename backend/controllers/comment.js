@@ -1,6 +1,5 @@
-const database = require('../config/database.js');
-const Comment = require('../models/Comment.js');
-const User = require('../models/User.js');
+const { Comment } = require('../models/index.js');
+const { User } = require('../models/index.js');
 
 /* logique pour afficher l'ensemble des commentaires d'un post */
 exports.getAllComments = (req, res) => {
@@ -18,7 +17,6 @@ exports.getAllComments = (req, res) => {
 /* logique pour créer un commentaire */
 exports.createComment = (req, res) => {
     try {
-        console.log(req.body);
         let { text, userId, postId } = req.body;
         Comment.create({text, postId, userId})
             .then(newComment => {

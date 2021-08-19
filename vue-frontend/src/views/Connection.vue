@@ -1,3 +1,3 @@
 <script>
-console.log('connection to Groupomania')
+console.log('connexion à Groupomania')
 </script>

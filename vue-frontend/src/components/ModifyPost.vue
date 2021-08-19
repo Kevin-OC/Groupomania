@@ -27,9 +27,10 @@ import router from '../router'
 export default {
     name: 'ModifyPost',
     beforeCreate() {
+        /* on récupère l'id du post via l'url */
         const parsedUrl = new URL(window.location.href)
         const postId = parsedUrl.pathname.split('/modify-post/')[1]
-        
+        /* selon l'id on récupère le post concerné */
         fetch(`http://localhost:3000/api/posts/${postId}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`

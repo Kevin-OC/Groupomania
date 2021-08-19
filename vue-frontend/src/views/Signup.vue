@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            // assigne les valeurs entrées du formulaire à l'objet data
+            /* assigne les valeurs entrées du formulaire à l'objet data */
             const data = {
                 ...this.dataForm
             }
@@ -44,16 +44,16 @@ export default {
                 email: this.dataForm.email,
                 password: this.dataForm.password
             }
-            // vérifie si tous les champs sont bien remplis
+            /* vérifie si tous les champs sont bien remplis */
             if (!data.firstname || !data.lastname || !data.email || !data.password) {
                 this.errMsg = "Err! Remplissez tous les champs du formulaire"
                 return
             }    
-            // nos regex
+            /* nos regex */
             const regexName = /^[a-zéèçàêïü]{2,50}(-| )?([a-zéèçà]{2,50})?$/gmi;
             const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
             const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
-            // nos véfifications
+            /* nos véfifications */
             if (!(regexName.test(data.firstname && data.lastname))) {
                 this.errMsg = "Name Err! => format nom et/ou prénom incorrect";
                 return
@@ -67,7 +67,7 @@ export default {
                 return
             }
 
-            // envoi à l'API (signup -> login -> /home)
+            /* envoi à l'API (signup -> login -> /home) */
             fetch('http://localhost:3000/api/users/signup', {
                 method: 'POST',
                 headers: {
@@ -77,7 +77,7 @@ export default {
                 body: JSON.stringify(data),
             })
                 .then(() => {
-                // Si le signup est réussi on passe par login pour obtenir le token + userId en réponse
+                /* Si le signup est réussi on passe par login pour obtenir le token + userId en réponse */
                     fetch('http://localhost:3000/api/users/login', {
                         method: 'POST',
                         mode: 'cors',

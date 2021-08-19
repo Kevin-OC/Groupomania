@@ -3,11 +3,11 @@
         <div :key="post.id" v-for="post in posts" class="post">
             <div class="header">
                 <div class="profileContainer">
-                    <img :src="'http://localhost:3000/images/' + post.user.profile" :alt="post.user.profile" class="profile">    
+                    <img :src="'http://localhost:3000/images/' + post.User.profile" :alt="post.User.profile" class="profile">    
                 </div>
                 <div class="description">
                     <div>
-                        <h4>{{ post.user.firstname }} {{ post.user.lastname }}</h4>
+                        <h4>{{ post.User.firstname }} {{ post.User.lastname }}</h4>
                         <p>posté le {{ post.createdAt }}</p>
                     </div>                 
                     <div v-if="auth(post.userId)" class="optionsBtn">
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div id="noPost" v-else>
-        <p>Il n'y a pas encore de publications! Cliquez sur "créer un post" pour en faire une.</p>
+        <p>"Nous n'avons pas trouvé de publications!"</p>
     </div>
 </template>
 
@@ -57,6 +57,7 @@ export default {
         }
     },
     methods: {
+        /* détermine le statut de l'user connecté par rapport à ce post */
         auth(postUserId) {
             if (this.isAdmin) {
                 return true
@@ -64,8 +65,9 @@ export default {
             if (this.userId !== postUserId) {
                 return false
             }
-            return true              
+            return true          
         },
+        /* la fonction pour montrer/cacher la section commentaires */
         toggleComments(postId) {
             if (this.showComments == postId) {
                 postId = null
@@ -73,6 +75,7 @@ export default {
             this.showComments = postId
             this.fetchComments(postId)
         },
+        /* pour supprimer le post */
         deletePost(postId) {
             const data = {
                 userId: localStorage.getItem('userId')
@@ -86,21 +89,25 @@ export default {
                         body: JSON.stringify(data)                
                     })
                         .catch(error => console.log(error))
-                this.$emit('delete-Post', postId)
+                this.$emit('delete-Post', postId) // <- on envoie un emitter pour actualiser dynamiquement
             }
         },
+        /* vers la page de modification du post (selon son id) */
         modifyPost(id) {
             router.push({ path: `/modify-post/${id}` })
         },
+        /* ajout d'un commentaire (via les emitters du composant 'Comment') */
         async addComment(commentId) {
             const comment = await fetch(`http://localhost:3000/api/comments/${JSON.stringify(commentId)}`)
             const newComment =  await comment.json()
             this.comments.unshift(newComment)
             return newComment
         },
+        /* actualisation suite à la suppression du commentaire */
         async deleteComment(commentId) {
             this.comments = this.comments.filter((comment) => comment.id != commentId)
         },
+        /* le fetch de tous les commentaires d'un post (selon son postId) */
         async fetchComments(postId) {
             if (postId == null) {
                 return
