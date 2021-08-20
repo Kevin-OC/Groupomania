@@ -107,4 +107,9 @@ span {
     font-style: italic;
     font-weight: 500;
 }
+@media screen and (max-width: 992px) {
+    #showProfile {
+        max-width: 100%;
+    }
+}
 </style>

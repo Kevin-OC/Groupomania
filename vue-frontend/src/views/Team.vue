@@ -80,7 +80,7 @@ export default {
 #header {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    margin-bottom: 1rem;;
 }
 .profileContainer {
     width: 96px;
@@ -89,6 +89,7 @@ export default {
     min-height: 64px;    
     border-radius: 50%;
     overflow: hidden;
+    margin-right: 1rem;
 }
 .profile {
     height: 100%;

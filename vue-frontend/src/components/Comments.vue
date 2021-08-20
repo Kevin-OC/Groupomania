@@ -23,8 +23,8 @@
             </div>                       
             <p v-show="!editComment" class="commentText">{{comment.text}}</p>
             <!-- pour modifier le commentaire -->
-            <form v-if="editComment == comment.id" @submit.prevent="modifyComment(comment.id, comment.text)">
-                <input name="updateComment" v-model="comment.text" class="text">                           
+            <form v-if="editComment == comment.id" @submit.prevent="modifyComment(comment.id)">
+                <input name="updateComment" ref="modify" :value="comment.text" class="text">                           
                 <input type="submit" value="Je modifie!" class="btn">
             </form>                          
         </div>        
@@ -84,7 +84,10 @@ export default {
             return true              
         },
         /* pour afficher/cacher la section commentaire de ce post */
-        toggleComment(commentId) {
+        toggleComment(commentId, cancel) {
+            if (cancel) {
+                console.log("hello")
+            }
             if (this.editComment == commentId) {
                 commentId = null
             }
@@ -104,9 +107,9 @@ export default {
             }   
         },
         /* pour modifier le commentaire */ 
-        modifyComment(commentId, commentText) {
+        modifyComment(commentId) {        
             const data = {
-                text: commentText
+                text: this.$refs.modify.value
             }
             fetch(`http://localhost:3000/api/comments/${JSON.stringify(commentId)}`, {
                 method: 'PUT',
@@ -117,11 +120,12 @@ export default {
                 body: JSON.stringify(data) 
             })
                 .catch(error => console.log(error))
+            this.$emit('modified', commentId, data.text)
             this.toggleComment(commentId)
         }
     },
     /* on indique les emitters (ici l'ajout et la suppression) */
-    emits: ['created', 'deleted']
+    emits: ['created', 'deleted', 'modified']
 }
 </script>
 

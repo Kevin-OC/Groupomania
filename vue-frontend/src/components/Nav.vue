@@ -2,7 +2,7 @@
     <div id="nav">        
         <div id="logo">
             <router-link :to="redirection">
-                <img src="../assets/logos/icon-left-font.svg" alt="logo">
+                <img src="../assets/logos/icon-left-font.png" alt="logo">
             </router-link>
         </div>
         <!-- l'user n'est pas connecté -> signup/login -->
@@ -70,5 +70,26 @@ img {
 }
 i {
     margin-right: 2px;
+}
+@media screen and (max-width: 992px) {
+    #nav {
+        flex-direction: column;
+        height: 100%;
+        text-align: center;
+    }
+    #logo {
+        max-width: 200px;
+        max-height: 100px;
+        overflow: hidden;
+    }
+    img {
+        height: 50%;
+        width: 50%;
+        object-fit: cover;
+    }
+    #options {
+        display: inline;
+        margin: 1rem;
+    }
 }
 </style>

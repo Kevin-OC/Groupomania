@@ -26,7 +26,7 @@
                 <button @click="toggleComments(post.id)" class="btn comments"><i class="far fa-comment"></i>Commentaires</button>
             </div>
             <Comments v-if="showComments == post.id" :comments="comments" :isAdmin="isAdmin" :userId="userId" :postId="post.id" 
-                @created="addComment" @deleted="deleteComment" />             
+                @created="addComment" @deleted="deleteComment" @modified="modifyComment"/>             
         </div>
     </div>
     <div id="noPost" v-else>
@@ -107,6 +107,14 @@ export default {
         async deleteComment(commentId) {
             this.comments = this.comments.filter((comment) => comment.id != commentId)
         },
+        /* actualisation suite à la modification du commentaire */
+        async modifyComment(commentId, newText) {
+            this.comments.forEach(comment => {
+                if(comment.id == commentId) {
+                    comment.text = newText
+                }
+            }) 
+        },            
         /* le fetch de tous les commentaires d'un post (selon son postId) */
         async fetchComments(postId) {
             if (postId == null) {

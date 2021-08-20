@@ -178,10 +178,6 @@ img {
     object-fit: cover;
 }
 #file {
-    /*position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0.01;*/
     cursor: pointer;
 }
 i {
@@ -208,5 +204,10 @@ button {
 .delete:hover {
     color: red;
     font-weight: bold;
+}
+@media screen and (max-width: 992px) {
+    #editProfile {
+        max-width: 100%;
+    }
 }
 </style>
