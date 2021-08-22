@@ -96,12 +96,11 @@ export default {
             if (this.file) {
                 formData.append('file', this.file)
             }            
-            /*
-            / nos regex
+            /* nos regex */
             const regexName = /^[a-zéèçàêïü]{2,50}(-| )?([a-zéèçà]{2,50})?$/gmi;
             const regexEmail = /^[\w-.]{2,32}@([\w-]+\.)+[\w-]{2,4}$/g;
             const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,32})/;
-            /* nos véfifications
+            /* nos véfifications */
             if (!(regexName.test(this.updateUser.firstname && this.updateUser.lastname))) {
                 this.errMsg = "Name Err! => format nom et/ou prénom incorrect";
                 return
@@ -110,10 +109,11 @@ export default {
                 this.errMsg = "Email Err! => l'email inscrit n'a pas le bon format (exemple@mail.com)"
                 return
             }
-            if(!(regexPassword.test(this.updateUser.password))) {
+            if(this.updateUser.password && !(regexPassword.test(this.updateUser.password))) {
                 this.errMsg = "Password Err! => entre 8 et 32 caractères + 1 minuscule min + 1 maj min + 1 caractère spécial"
                 return
-            }*/
+            }
+            /* on envoie notre requête */
             if (confirm("êtes vous sûr de vouloir modifier votre profil ?")) {
                 axios.put(`http://localhost:3000/api/users/${localStorage.getItem('userId')}`, formData, {
                     headers: {
