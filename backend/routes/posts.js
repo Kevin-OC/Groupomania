@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const postCtrl = require('../controllers/post.js');
-const auth = require('../middleware/postAuth.js');
+const auth = require('../middleware/auth.js');
+const postAuth = require('../middleware/postAuth.js');
 const multer = require('../middleware/multer-config.js');
 const likesCtrl = require('../controllers/likes.js');
 
 /* '/' = https://localhost:3000/api/posts */
 
 /* route création post */
-router.post('/create', multer, postCtrl.createPost);
+router.post('/create', auth, multer, postCtrl.createPost);
 
 /* route affichage ensemble des posts */
 router.get('/all', postCtrl.getAllPosts);
@@ -17,10 +18,10 @@ router.get('/all', postCtrl.getAllPosts);
 router.get('/:id', postCtrl.getOnePost);
 
 /* route modification post */
-router.put('/:id', auth, multer, postCtrl.editPost);
+router.put('/:id', postAuth, multer, postCtrl.editPost);
 
 /* route suppression post */
-router.delete('/:id', auth, postCtrl.deletePost);
+router.delete('/:id', postAuth, postCtrl.deletePost);
 
 /* route pour like un post */
 router.post('/:postId/like', likesCtrl.likePost);
