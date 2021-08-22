@@ -2,7 +2,9 @@
     <div id="nav">        
         <div id="logo">
             <router-link :to="redirection">
-                <img src="../assets/logos/icon-left-font.png" alt="logo">
+                <div id="logoContainer">
+                    <img src="../assets/logos/icon-left-font.svg" alt="logo">    
+                </div>                
             </router-link>
         </div>
         <!-- l'user n'est pas connecté -> signup/login -->
@@ -55,9 +57,6 @@ export default {
     justify-content: flex-end;  
     width: 100%;  
 }
-img {
-    height: 16rem;
-}
 .link {
     text-align: center;
     padding: 1rem;
@@ -78,18 +77,14 @@ i {
         text-align: center;
     }
     #logo {
-        max-width: 200px;
-        max-height: 100px;
-        overflow: hidden;
+        margin-top: 1rem;
     }
-    img {
-        height: 50%;
-        width: 50%;
-        object-fit: cover;
-    }
-    #options {
+    #options, #routes {
         display: inline;
         margin: 1rem;
+    }
+    .link {
+        margin: 0 1rem 0 1rem;
     }
 }
 </style>

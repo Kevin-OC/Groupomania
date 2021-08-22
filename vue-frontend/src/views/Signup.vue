@@ -146,4 +146,9 @@ input:hover {
     background-color: rgba(0, 128, 0, 0.836);
     margin: 2rem;
 }
+@media screen and (max-width: 992px) {
+    form {
+        width: 100%;
+    }
+}
 </style>

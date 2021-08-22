@@ -99,4 +99,9 @@ export default {
 p {
     margin: 0.5rem;
 }
+@media screen and (max-width: 992px) {
+    #usersContainer {
+        max-width: 90%;
+    }
+}
 </style>

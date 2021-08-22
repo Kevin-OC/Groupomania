@@ -151,5 +151,9 @@ textarea {
     color: white;
     margin: 1rem 0 1rem 0;
 }
-
+@media screen and (max-width: 992px) {
+    #modifyPost {
+        max-width: 90%;
+    }
+}
 </style>

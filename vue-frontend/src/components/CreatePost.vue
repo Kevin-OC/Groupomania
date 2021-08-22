@@ -120,4 +120,9 @@ img {
 p {
     margin-top: 1.6rem;
 }
+@media screen and (max-width: 992px) {
+    #createPost {
+        max-width: 90%;
+    }
+}
 </style>

@@ -109,4 +109,12 @@ span {
     border-right-style: none;
     border-radius: 4px 0 0 4px;
 }
+@media screen and (max-width: 992px) {
+    #query {
+        margin-left: 2rem;
+    }
+    .btn {
+        margin-left: 2rem;
+    }
+}
 </style>
