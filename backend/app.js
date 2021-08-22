@@ -19,7 +19,7 @@ try {
     console.error('Unable to connect sequelize to the database:', error);
 }
 /* Création des tables MySQL si elles n'existent pas */
-//sequelize.sync({ force: true });
+sequelize.sync({ force: false });
 //sequelize.sync({ alter: true })
 
 /* middleware général pour établir les autorisations (*, CORS, METHODS) */
