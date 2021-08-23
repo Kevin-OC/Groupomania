@@ -4,7 +4,7 @@ Prérequis:
 
     - Frontend: Vue.js
     - Backend: Node.js (avec Express.js)
-    - ORM: Sequelize
+    - ORM: Sequelize (avec sequelize CLI)
     - Database: MySQL
 
 Installation:
@@ -21,6 +21,7 @@ Installation:
     - BACKEND:
         cd backend
         npm install
+        npm i sequelize-cli
         npx sequelize-cli db:create
         node server.js
 
