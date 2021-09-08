@@ -6,7 +6,8 @@ const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png',
-    'image/svg+xml': 'svg'
+    'image/svg+xml': 'svg',
+    'image/gif': 'gif'
 };
 
 /* la méthode 'diskStorage()' demande: un dossier de destination, et un nom de fichier */
