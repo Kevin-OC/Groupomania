@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         selectFile(event) {
-            /* sur le onchange on va attribuer cette valeur à file (nécessaire pour l'envoi au backend) */ 
+            /* sur le onchange on va attribuer cette valeur à file (nécessaire pour l'envoi au backend) */
             this.file = this.$refs.file.files[0]
             let input = event.target
             if(input.files) {
@@ -65,6 +65,7 @@ export default {
             this.text = ''
             this.file = ''
             this.preview = ''
+            document.querySelector('form').reset()           
         }
     }
 }
