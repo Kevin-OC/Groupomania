@@ -1,8 +1,12 @@
 <template>
     <Nav redirection="/home" :logged="true" />  
     <Header :home="false" header="Membres" />
-    <div id="usersContainer">            
-        <div :key="user.id" v-for="user in users" class="user">
+    <div id="usersContainer">
+        <div id="query">
+            <span><i class="fas fa-search"></i></span>
+            <input type="text" placeholder="exemple: John Doe" v-model="search">
+        </div>           
+        <div :key="user.id" v-for="user in filterUsers" class="user">
             <div id="header">
                 <div class="profileContainer">
                     <img :src="'http://localhost:3000/images/' + user.profile" :alt="user.profile" class="profile">    
@@ -30,7 +34,8 @@ export default {
     data() {
         return {
             users: [],
-            showPosts: null
+            showPosts: null,
+            search: ""
         }
     },
     methods: {
@@ -38,7 +43,9 @@ export default {
         async fetchUsers() {
             const res = await fetch('http://localhost:3000/api/users/all')
             const data = await res.json()
-            console.log(data)
+            data.forEach(user => {
+                user.username = user.firstname + " " + user.lastname
+            })
             return data
         },
         /* le compteur des likes reçus par l'user */
@@ -61,13 +68,20 @@ export default {
     },
     async created() {
         this.users = await this.fetchUsers()
+    },
+    computed: {
+        filterUsers: function() {
+            return this.users.filter((user) => {
+                return user.username.toLowerCase().match(this.search.toLowerCase())
+            })
+        }
     }
 }
 </script>
 
 <style scoped>
 #usersContainer {
-    max-width: 400px;
+    max-width: 600px;
     margin: auto;
     border-radius: 4px;
 }
@@ -98,6 +112,24 @@ export default {
 }
 p {
     margin: 0.5rem;
+}
+#query {
+    text-align: center;
+}
+input {
+    padding: 6px;
+    border: 1px solid #1c68e6;
+    border-radius: 0 4px 4px 0;
+    border-left-style: none;
+}
+input:focus {
+    outline: none;
+}
+span {
+    padding: 6px;
+    border: 1px solid #1c68e6;
+    border-right-style: none;
+    border-radius: 4px 0 0 4px;
 }
 @media screen and (max-width: 992px) {
     #usersContainer {

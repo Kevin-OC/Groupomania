@@ -80,7 +80,7 @@ i {
         margin-top: 1rem;
     }
     #options, #routes {
-        display: inline;
+        justify-content: space-between;
         margin: 1rem;
     }
     .link {

@@ -123,7 +123,6 @@ export default {
             const resComments = await fetch(`http://localhost:3000/api/comments/${JSON.stringify(postId)}/all`)
             const dataComments = await resComments.json()
             dataComments.reverse()
-            console.log(dataComments)
             this.comments = dataComments
             return dataComments
         }        
@@ -139,9 +138,11 @@ export default {
 }
 .post {
     box-shadow: 2px 2px 8px 5px rgb(0 0 0 / 10%);
-    margin: 2rem;
+    margin: auto;
+    margin-top: 2rem;
     padding: 1rem 2rem 1rem 2rem;
     border-radius: 4px;
+    max-width: 700px;
 }
 .header {
     display: flex;
@@ -154,11 +155,12 @@ export default {
     vertical-align: center;
     width: 90%;
     padding-left: 16px;
+    flex-wrap: wrap;
 }
 .profileContainer {
     margin: auto;
-    max-width: 96px;
-    max-height: 96px;
+    width: 96px;
+    height: 96px;
     min-width: 64px;
     min-height: 64px;
     border-radius: 50%;
@@ -210,6 +212,27 @@ i {
     }
     .post {
         margin: 2rem 0 0 0;
+    }
+    .header {
+        flex-direction: column;
+    }
+    .profileContainer {
+        max-width: 64px;
+        max-height: 64px;
+    }
+    .description {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        vertical-align: center;
+        width: 100%;
+        padding-left: 0;
+        flex-wrap: wrap;
+        line-height: 2rem;
+    }
+    .optionsBtn {
+        display: flex;
+        justify-content: space-between;
     }
 }
 </style>

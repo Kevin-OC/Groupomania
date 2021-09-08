@@ -2,7 +2,7 @@
     <!-- pour créer un nouveau commentaire -->
     <form @submit.prevent="createComment" v-show="!editComment">
         <input name="comment" placeholder="Publiez un commentaire" v-model="newComment" class="text">                           
-        <input type="submit" value="Je commente!" class="btn" >
+        <input type="submit" value="Je commente!" class="btn">
     </form>
     <p>{{errMsg}}</p>
     <!-- pour montrer la section commentaire (s'il y en a) -->
@@ -160,8 +160,10 @@ export default {
     margin: auto;
     max-width: 48px;
     max-height: 48px;
-    min-width: 16px;
-    min-height: 16px;
+    height: 48px;
+    width: 48px;
+    min-height: 48px;
+    min-width: 48px;
     border-radius: 50%;
     overflow: hidden;
 }
@@ -205,5 +207,33 @@ button {
 }
 i {
     margin-right: 3px;
+}
+@media screen and (max-width: 992px) {
+    .header {
+        flex-wrap: wrap;
+        justify-content: space-around;
+        line-height: 2rem;
+    }
+    .profileContainer {
+        margin: 0;
+    }
+    .commentUsername {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding-left: 0;    
+    }
+    .optionsBtn {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .commentText {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        padding: 0.5rem;
+    }
+    .btn {
+        width: 100%;
+    }
 }
 </style>
