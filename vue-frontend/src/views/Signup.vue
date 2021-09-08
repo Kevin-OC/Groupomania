@@ -75,32 +75,38 @@ export default {
                 },
                 mode: 'cors',
                 body: JSON.stringify(data),
-            })
-                .then(() => {
-                /* Si le signup est réussi on passe par login pour obtenir le token + userId en réponse */
-                    fetch('http://localhost:3000/api/users/login', {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(login)
-                    })
-                        .then(res => {
-                            const localData = res
-                            store.state.isLogged = true
-                            localData.json().then(data => {
-                                localStorage.setItem('token', data.token)
-                                localStorage.setItem('userId', data.userId)
-                                localStorage.setItem('isAdmin', data.isAdmin)
-                            })                    
-                            if (res.status === 200 ) {
-                                router.push({ path: 'home' })
-                            }  else {
-                                this.errMsg = "Email ou mot de passe incorrect"
-                            }
+            })  
+                .then(res => { 
+                    if (res.status === 201) {
+                        /* Si le signup est réussi on passe par login pour obtenir le token + userId en réponse */
+                        fetch('http://localhost:3000/api/users/login', {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(login)
                         })
-                        .catch(error => {console.error(error)})
+                            .then(res => {
+                                const localData = res
+                                store.state.isLogged = true
+                                localData.json().then(data => {
+                                    localStorage.setItem('token', data.token)
+                                    localStorage.setItem('userId', data.userId)
+                                    localStorage.setItem('isAdmin', data.isAdmin)
+                                })                    
+                                if (res.status === 200 ) {
+                                    router.push({ path: 'home' })
+                                }  else {
+                                    this.errMsg = "Email ou mot de passe incorrect"
+                                }
+                            })
+                            .catch(error => {console.error(error)})    
+                    } else {
+                        this.errMsg = "Email déjà existant"
+                        return
+                    }
+                
                 })
                 .catch(error => {console.error(error)})
         }

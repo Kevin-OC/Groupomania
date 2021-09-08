@@ -50,9 +50,8 @@ export default {
             dataPosts.forEach(post => {
                 post.createdAt = post.createdAt.split('T')[0]
                 post.User.username = post.User.firstname + " " + post.User.lastname
-            });
+            })
             dataPosts.reverse()
-            console.log(dataPosts)
             return dataPosts
         }
     },
