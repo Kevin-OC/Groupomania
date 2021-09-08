@@ -81,12 +81,22 @@ exports.editPost = (req, res) => {
 /* logique pour supprimer un post */
 exports.deletePost = (req, res) => {
     try {
-        Post.destroy({where: {id:req.params.id}})
+        Post.findOne({where: {id:req.params.id}})
             .then(post => {
-                console.log("Post supprimé");
-                res.status(200).json(post);
+                if(post.file) { // <- si post.file n'est pas null on supprime le fichier existant
+                    fs.unlink(`images/${post.file}`, (error) => {
+                        if (error) throw err
+                    })  
+                } else {
+                    console.log("ce post n'a pas de fichier à supprimer")
+                }
+                Post.destroy({where: {id:req.params.id}})
+                    .then(post => {
+                        console.log("Post supprimé");
+                        res.status(200).json(post);
+                    })
+                    .catch(error => res.status(400).json(error))    
             })
-            .catch(error => res.status(400).json(error))
     } catch {
         error => res.status(500).json(error);
     }

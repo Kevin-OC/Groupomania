@@ -34,7 +34,7 @@ exports.getOneComment = (req, res) => {
     try {
         Comment.findOne({where: {id:req.params.id}, include: User})
             .then(comment => {
-                console.log("Commentaire trouvé:", comment);
+                console.log("Commentaire trouvé");
                 res.status(200).json(comment);
             })
             .catch(error => res.status(400).json(error))
