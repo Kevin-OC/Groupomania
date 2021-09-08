@@ -3,6 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const { sequelize } = require('./models/index.js');
 const path = require('path');
+
 /* imports routes */
 const usersRoutes = require('./routes/users.js');
 const postsRoutes = require('./routes/posts.js');
@@ -10,6 +11,11 @@ const commentsRoutes = require('./routes/comments.js');
 
 /* notre app est une application express() */
 const app = express();
+
+/* ajout sécurité */
+require('dotenv').config();
+const helmet = require("helmet");
+app.use(helmet());
 
 /* Vérification si la connexion avec est bien établie */
 try {
@@ -19,7 +25,7 @@ try {
     console.error('Unable to connect sequelize to the database:', error);
 }
 /* Création des tables MySQL si elles n'existent pas */
-sequelize.sync({ force: false });
+//sequelize.sync({ force: false });
 //sequelize.sync({ alter: true })
 
 /* middleware général pour établir les autorisations (*, CORS, METHODS) */
